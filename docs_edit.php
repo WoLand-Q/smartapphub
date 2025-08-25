@@ -79,17 +79,16 @@ include __DIR__.'/partials_header.php';
     </div>
 </div>
 
-<!-- (по желанию можно подключить TinyMCE) -->
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+<script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
 <script>
-    tinymce.init({
-        selector: 'textarea[name=description_md]',
-        menubar: false,
-        height: 380,
-        plugins: 'link lists code',
-        toolbar: 'undo redo | bold italic | bullist numlist | link | code',
-        skin: document.documentElement.dataset.bsTheme === 'dark' ? 'oxide-dark' : 'oxide',
-        content_css: document.documentElement.dataset.bsTheme === 'dark' ? 'dark' : 'default'
+    const mde = new EasyMDE({
+        element: document.querySelector('textarea[name=description_md]'),
+        spellChecker: false,
+        autosave: { enabled: true, uniqueId: 'docs_md_'+<?= (int)$id ?>, delay: 800 },
+        status: false,
+        toolbar: ['undo','redo','|','bold','italic','heading','|','unordered-list','ordered-list','table','link','code','preview','guide']
     });
 </script>
 
