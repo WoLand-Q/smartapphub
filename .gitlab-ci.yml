@@ -7,12 +7,20 @@ variables:
 # --- BUILD ---
 build:
   stage: build
-  tags: ["smartapphub","docker"]              # чтобы джоб сел на твой runner
+  tags: ["smartapphub","docker"]
   image: docker:24
+  before_script:
+    - unset DOCKER_HOST || true
+    - export DOCKER_HOST=unix:///var/run/docker.sock
+    - echo "== docker env =="
+    - env | sort | grep -E '^DOCKER|CI_REGISTRY' || true
+    - ls -l /var/run/docker.sock || true
+    - docker version
+    - docker info | sed -n '1,15p'
   script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
-    - docker build -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" -t "$CI_REGISTRY_IMAGE:latest" .
-    - docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG"
+    - docker build -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE:latest" .
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
     - docker push "$CI_REGISTRY_IMAGE:latest"
   only: [main, master]
 
