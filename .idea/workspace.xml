@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fce0f15f-ec5c-4820-b542-3867dc9d2ffb" name="Changes" comment="Добавил конфиги для докера и гит лаба">
+    <list default="true" id="fce0f15f-ec5c-4820-b542-3867dc9d2ffb" name="Changes" comment="Обновил конфиги">
+      <change beforePath="$PROJECT_DIR$/.gitlab-ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.gitlab-ci.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deploy/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/docker-compose.yml" afterDir="false" />
@@ -69,7 +70,7 @@
       <workItem from="1756123252882" duration="25179000" />
       <workItem from="1756189661556" duration="1290000" />
       <workItem from="1756291298031" duration="609000" />
-      <workItem from="1756365841157" duration="2667000" />
+      <workItem from="1756365841157" duration="3306000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
@@ -111,7 +112,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756371785252</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Обновил конфиги">
+      <option name="closed" value="true" />
+      <created>1756373233228</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1756373233228</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -133,6 +142,7 @@
     <MESSAGE value="обновил" />
     <MESSAGE value="пофиксил и добавил просмотр документов" />
     <MESSAGE value="Добавил конфиги для докера и гит лаба" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавил конфиги для докера и гит лаба" />
+    <MESSAGE value="Обновил конфиги" />
+    <option name="LAST_COMMIT_MESSAGE" value="Обновил конфиги" />
   </component>
 </project>

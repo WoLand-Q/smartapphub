@@ -1,19 +1,14 @@
 stages: [build, deploy]
 
+# Dood: используем хостовый docker.sock → никакого services:dind и DOCKER_HOST
 variables:
-  # dind
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_TLS_CERTDIR: ""
   IMAGE_TAG: $CI_COMMIT_SHORT_SHA
 
 # --- BUILD ---
 build:
   stage: build
-  tags: ["smartapphub","docker"]     # чтобы джоб сел ровно на твой runner
+  tags: ["smartapphub","docker"]              # чтобы джоб сел на твой runner
   image: docker:24
-  services:
-    - name: docker:24-dind
-      command: ["--tls=false"]
   script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
     - docker build -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" -t "$CI_REGISTRY_IMAGE:latest" .
@@ -24,7 +19,7 @@ build:
 # --- DEPLOY ---
 deploy:
   stage: deploy
-  tags: ["smartapphub","docker"]     # те же теги
+  tags: ["smartapphub","docker"]
   image: alpine:3.20
   before_script:
     - apk add --no-cache openssh-client rsync docker-cli docker-cli-compose
@@ -33,18 +28,18 @@ deploy:
     - chmod 600 ~/.ssh/id_rsa
     - ssh-keyscan -p "${SERVER_SSH_PORT:-22}" "$SERVER_HOST" >> ~/.ssh/known_hosts
   script:
-    # Подготовим директории на сервере
+    # каталоги на сервере (персистент)
     - |
       ssh -p "${SERVER_SSH_PORT:-22}" "$SERVER_USER@$SERVER_HOST" \
       "mkdir -p $SERVER_DEPLOY_PATH \
                /home/botwork/smartapphub/uploads \
                /home/botwork/smartapphub/data && \
        sudo chown -R 33:33 /home/botwork/smartapphub"
-    # Зальём compose
+    # заливаем compose
     - |
       rsync -avz -e "ssh -p ${SERVER_SSH_PORT:-22}" deploy/docker-compose.yml \
         "$SERVER_USER@$SERVER_HOST:$SERVER_DEPLOY_PATH/docker-compose.yml"
-    # Логин в реестр и выкладка
+    # логин в реестр и выкладка
     - |
       ssh -p "${SERVER_SSH_PORT:-22}" "$SERVER_USER@$SERVER_HOST" \
       "echo '$GL_DEPLOY_TOKEN' | docker login -u '$GL_DEPLOY_USER' --password-stdin $CI_REGISTRY && \
