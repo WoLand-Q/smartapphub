@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fce0f15f-ec5c-4820-b542-3867dc9d2ffb" name="Changes" comment="Обновил конфиги 4">
+    <list default="true" id="fce0f15f-ec5c-4820-b542-3867dc9d2ffb" name="Changes" comment="Обновил конфиги 5">
+      <change beforePath="$PROJECT_DIR$/.gitlab-ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.gitlab-ci.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deploy/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/docker-compose.yml" afterDir="false" />
     </list>
@@ -68,7 +69,7 @@
       <workItem from="1756123252882" duration="25179000" />
       <workItem from="1756189661556" duration="1290000" />
       <workItem from="1756291298031" duration="609000" />
-      <workItem from="1756365841157" duration="4397000" />
+      <workItem from="1756365841157" duration="5197000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
@@ -142,7 +143,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756376516630</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Обновил конфиги 5">
+      <option name="closed" value="true" />
+      <created>1756376545232</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1756376545232</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -168,6 +177,7 @@
     <MESSAGE value="Обновил конфиги 2" />
     <MESSAGE value="Обновил конфиги 3" />
     <MESSAGE value="Обновил конфиги 4" />
-    <option name="LAST_COMMIT_MESSAGE" value="Обновил конфиги 4" />
+    <MESSAGE value="Обновил конфиги 5" />
+    <option name="LAST_COMMIT_MESSAGE" value="Обновил конфиги 5" />
   </component>
 </project>

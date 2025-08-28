@@ -1,7 +1,6 @@
-version: "3.9"
 services:
   app:
-    image: ${REGISTRY_IMAGE}:latest      # получаем из окружения ssh-команды
+    image: ${REGISTRY_IMAGE}:latest
     container_name: smartapphub
     restart: unless-stopped
     ports:
@@ -16,4 +15,3 @@ services:
       interval: 20s
       timeout: 5s
       retries: 5
-
