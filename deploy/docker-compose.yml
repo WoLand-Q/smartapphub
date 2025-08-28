@@ -1,14 +1,13 @@
 version: "3.9"
-
 services:
   app:
-    image: ${REGISTRY_IMAGE:-$CI_REGISTRY_IMAGE}:latest
+    image: ${REGISTRY_IMAGE}:latest      # получаем из окружения ssh-команды
     container_name: smartapphub
     restart: unless-stopped
     ports:
       - "6881:80"
     environment:
-      PHP_MEMORY_LIMIT: 2565M
+      PHP_MEMORY_LIMIT: 256M
     volumes:
       - /home/botwork/smartapphub/uploads:/var/www/html/uploads
       - /home/botwork/smartapphub/data:/var/www/html/data
@@ -17,3 +16,4 @@ services:
       interval: 20s
       timeout: 5s
       retries: 5
+
