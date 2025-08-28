@@ -1,10 +1,8 @@
 stages: [build, deploy]
 
-# Dood: используем хостовый docker.sock → никакого services:dind и DOCKER_HOST
 variables:
   IMAGE_TAG: $CI_COMMIT_SHORT_SHA
 
-# --- BUILD ---
 build:
   stage: build
   tags: ["smartapphub","docker"]
@@ -12,19 +10,15 @@ build:
   before_script:
     - unset DOCKER_HOST || true
     - export DOCKER_HOST=unix:///var/run/docker.sock
-    - echo "== docker env =="
-    - env | sort | grep -E '^DOCKER|CI_REGISTRY' || true
-    - ls -l /var/run/docker.sock || true
     - docker version
-    - docker info | sed -n '1,15p'
   script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
-    - docker build -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE:latest" .
-    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
+    - echo "Build & push -> $CI_REGISTRY_IMAGE:$IMAGE_TAG"
+    - docker build -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" -t "$CI_REGISTRY_IMAGE:latest" .
+    - docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG"
     - docker push "$CI_REGISTRY_IMAGE:latest"
   only: [main, master]
 
-# --- DEPLOY ---
 deploy:
   stage: deploy
   tags: ["smartapphub","docker"]
@@ -36,24 +30,28 @@ deploy:
     - chmod 600 ~/.ssh/id_rsa
     - ssh-keyscan -p "${SERVER_SSH_PORT:-22}" "$SERVER_HOST" >> ~/.ssh/known_hosts
   script:
-    # каталоги на сервере (персистент)
+    # каталоги на сервере
     - |
-      ssh -p "${SERVER_SSH_PORT:-22}" "$SERVER_USER@$SERVER_HOST" \
-      "mkdir -p $SERVER_DEPLOY_PATH \
-               /home/botwork/smartapphub/uploads \
-               /home/botwork/smartapphub/data && \
-       sudo chown -R 33:33 /home/botwork/smartapphub"
+      ssh -p "${SERVER_SSH_PORT:-22}" "$SERVER_USER@$SERVER_HOST" "
+        set -e
+        mkdir -p \"$SERVER_DEPLOY_PATH\" \
+                 /home/botwork/smartapphub/uploads \
+                 /home/botwork/smartapphub/data
+        sudo chown -R 33:33 /home/botwork/smartapphub
+      "
     # заливаем compose
+    - rsync -avz -e "ssh -p ${SERVER_SSH_PORT:-22}" deploy/docker-compose.yml "$SERVER_USER@$SERVER_HOST:$SERVER_DEPLOY_PATH/docker-compose.yml"
+    # ВАЖНО: переменные РАЗВОРАЧИВАЕМ ДО отправки на сервер (двойные кавычки), без одинарных!
     - |
-      rsync -avz -e "ssh -p ${SERVER_SSH_PORT:-22}" deploy/docker-compose.yml \
-        "$SERVER_USER@$SERVER_HOST:$SERVER_DEPLOY_PATH/docker-compose.yml"
-    # логин в реестр и выкладка
-    - |
-      ssh -p "${SERVER_SSH_PORT:-22}" "$SERVER_USER@$SERVER_HOST" \
-      "echo '$GL_DEPLOY_TOKEN' | docker login -u '$GL_DEPLOY_USER' --password-stdin $CI_REGISTRY && \
-       REGISTRY_IMAGE='$CI_REGISTRY_IMAGE' docker compose -f $SERVER_DEPLOY_PATH/docker-compose.yml pull && \
-       REGISTRY_IMAGE='$CI_REGISTRY_IMAGE' docker compose -f $SERVER_DEPLOY_PATH/docker-compose.yml up -d --remove-orphans && \
-       docker image prune -f"
+      ssh -p "${SERVER_SSH_PORT:-22}" "$SERVER_USER@$SERVER_HOST" "
+        set -e
+        printf '%s' \"$GL_DEPLOY_TOKEN\" | docker login -u \"$GL_DEPLOY_USER\" --password-stdin \"$CI_REGISTRY\"
+        export REGISTRY_IMAGE=\"$CI_REGISTRY_IMAGE\"
+        echo Using image: \$REGISTRY_IMAGE:latest
+        docker compose -f \"$SERVER_DEPLOY_PATH/docker-compose.yml\" pull
+        docker compose -f \"$SERVER_DEPLOY_PATH/docker-compose.yml\" up -d --remove-orphans
+        docker image prune -f
+      "
   needs: ["build"]
   environment:
     name: production
