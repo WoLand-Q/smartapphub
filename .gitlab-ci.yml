@@ -3,7 +3,6 @@ stages: [build, deploy]
 variables:
   IMAGE_TAG: $CI_COMMIT_SHORT_SHA
 
-# ---------- BUILD ----------
 build:
   stage: build
   tags: ["smartapphub","docker"]
@@ -20,7 +19,6 @@ build:
     - docker push "$CI_REGISTRY_IMAGE:latest"
   only: [main, master]
 
-# ---------- DEPLOY ----------
 deploy:
   stage: deploy
   tags: ["smartapphub","docker"]
@@ -31,17 +29,6 @@ deploy:
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - ssh-keyscan -p "${SERVER_SSH_PORT:-22}" "$SERVER_HOST" >> ~/.ssh/known_hosts
-    # логин в реестр, иначе manifest private-образа не увидит
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
-    # fail-fast: убеждаемся, что образ реально есть в реестре
-    - |
-      echo "Check image exists: $CI_REGISTRY_IMAGE:latest"
-      if ! docker manifest inspect "$CI_REGISTRY_IMAGE:latest" >/dev/null 2>&1; then
-        echo "❌ Образ $CI_REGISTRY_IMAGE:latest не найден в реестре.
-      Проверь: включён Container Registry и стадия build запушила образ." >&2
-        exit 1
-      fi
-
   script:
     # каталоги на сервере
     - |
@@ -53,17 +40,12 @@ deploy:
         sudo chown -R 33:33 /home/botwork/smartapphub
       "
     # заливаем compose
-    - |
-      rsync -avz -e "ssh -p ${SERVER_SSH_PORT:-22}" deploy/docker-compose.yml \
-        "$SERVER_USER@$SERVER_HOST:$SERVER_DEPLOY_PATH/docker-compose.yml"
-    # логин в реестр на сервере и выкладка
+    - rsync -avz -e "ssh -p ${SERVER_SSH_PORT:-22}" deploy/docker-compose.yml "$SERVER_USER@$SERVER_HOST:$SERVER_DEPLOY_PATH/docker-compose.yml"
+    # ВАЖНО: переменные РАЗВОРАЧИВАЕМ ДО отправки на сервер (двойные кавычки), без одинарных!
     - |
       ssh -p "${SERVER_SSH_PORT:-22}" "$SERVER_USER@$SERVER_HOST" "
         set -e
-        # сначала CI-креды, если не вышло — Deploy Token
-        if ! printf '%s' \"$CI_REGISTRY_PASSWORD\" | docker login -u \"$CI_REGISTRY_USER\" --password-stdin \"$CI_REGISTRY\"; then
-          printf '%s' \"$GL_DEPLOY_TOKEN\" | docker login -u \"$GL_DEPLOY_USER\" --password-stdin \"$CI_REGISTRY\"
-        fi
+        printf '%s' \"$GL_DEPLOY_TOKEN\" | docker login -u \"$GL_DEPLOY_USER\" --password-stdin \"$CI_REGISTRY\"
         export REGISTRY_IMAGE=\"$CI_REGISTRY_IMAGE\"
         echo Using image: \$REGISTRY_IMAGE:latest
         docker compose -f \"$SERVER_DEPLOY_PATH/docker-compose.yml\" pull
