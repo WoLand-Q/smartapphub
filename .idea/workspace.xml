@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fce0f15f-ec5c-4820-b542-3867dc9d2ffb" name="Changes" comment="пофиксил и добавил просмотр документов">
-      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+    <list default="true" id="fce0f15f-ec5c-4820-b542-3867dc9d2ffb" name="Changes" comment="Добавил конфиги для докера и гит лаба">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +69,7 @@
       <workItem from="1756123252882" duration="25179000" />
       <workItem from="1756189661556" duration="1290000" />
       <workItem from="1756291298031" duration="609000" />
-      <workItem from="1756365841157" duration="1217000" />
+      <workItem from="1756365841157" duration="2667000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
@@ -102,7 +103,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756151592125</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Добавил конфиги для докера и гит лаба">
+      <option name="closed" value="true" />
+      <created>1756371785252</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1756371785252</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -123,6 +132,7 @@
     <MESSAGE value="1" />
     <MESSAGE value="обновил" />
     <MESSAGE value="пофиксил и добавил просмотр документов" />
-    <option name="LAST_COMMIT_MESSAGE" value="пофиксил и добавил просмотр документов" />
+    <MESSAGE value="Добавил конфиги для докера и гит лаба" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавил конфиги для докера и гит лаба" />
   </component>
 </project>
