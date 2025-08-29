@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fce0f15f-ec5c-4820-b542-3867dc9d2ffb" name="Changes" comment="Обновил конфиги 6">
+    <list default="true" id="fce0f15f-ec5c-4820-b542-3867dc9d2ffb" name="Changes" comment="Обновил конфиги 7">
+      <change afterPath="$PROJECT_DIR$/docker/php-custom.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,20 +31,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "D:/server/htdocs",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/server/htdocs&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\server\htdocs\data" />
@@ -68,7 +69,8 @@
       <workItem from="1756123252882" duration="25179000" />
       <workItem from="1756189661556" duration="1290000" />
       <workItem from="1756291298031" duration="609000" />
-      <workItem from="1756365841157" duration="6516000" />
+      <workItem from="1756365841157" duration="8065000" />
+      <workItem from="1756455875456" duration="126000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
@@ -166,7 +168,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756378128415</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Обновил конфиги 7">
+      <option name="closed" value="true" />
+      <created>1756379221541</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1756379221541</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -194,6 +204,7 @@
     <MESSAGE value="Обновил конфиги 4" />
     <MESSAGE value="Обновил конфиги 5" />
     <MESSAGE value="Обновил конфиги 6" />
-    <option name="LAST_COMMIT_MESSAGE" value="Обновил конфиги 6" />
+    <MESSAGE value="Обновил конфиги 7" />
+    <option name="LAST_COMMIT_MESSAGE" value="Обновил конфиги 7" />
   </component>
 </project>

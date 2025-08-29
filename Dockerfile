@@ -13,8 +13,14 @@ RUN a2enmod rewrite headers \
 # PROD php.ini
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-# Разрешить .htaccess при необходимости
-RUN sed -ri "s/AllowOverride\s+None/AllowOverride All/i" /etc/apache2/apache2.conf
+# Разрешить .htaccess (если используешь) и снять лимит тела запроса на уровне Apache
+RUN sed -ri "s/AllowOverride\s+None/AllowOverride All/i" /etc/apache2/apache2.conf \
+ && printf "\n<Directory /var/www/html>\n    LimitRequestBody 0\n</Directory>\n" \
+      > /etc/apache2/conf-available/limitrequestbody.conf \
+ && a2enconf limitrequestbody
+
+
+COPY docker/php-custom.ini /usr/local/etc/php/conf.d/zzz-custom.ini
 
 WORKDIR /var/www/html
 COPY . /var/www/html
