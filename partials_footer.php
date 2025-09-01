@@ -42,15 +42,97 @@
 
     // Debounced search submit (ignore empty)
     (function(){
-        const f = document.querySelector('form[action="search.php"]');
-        if (!f) return;
-        const i = f.querySelector('input[name="q"]');
-        let t;
-        i.addEventListener('input', () => {
-            clearTimeout(t);
-            t = setTimeout(() => { if (i.value.trim()) f.requestSubmit(); }, 450);
+        const form = document.getElementById('sa-search-form');
+        if (!form) return;
+        const input   = document.getElementById('sa-search');
+        const menu    = document.getElementById('sa-suggest');
+        let timer, idx = -1;
+
+        function hide(){ menu.style.display='none'; menu.innerHTML=''; idx = -1; }
+        function show(){ menu.style.display='block'; }
+
+        function render(items){
+            if (!items.length) { hide(); return; }
+            menu.innerHTML = items.map((it,i)=>`
+      <a href="${it.url}" class="dropdown-item${i===0?' active':''}" data-i="${i}">
+        <span class="text-muted small me-2">[${it.type}]</span>${it.title ? it.title.replace(/</g,'&lt;') : ''}
+      </a>
+    `).join('');
+            idx = 0; show();
+        }
+
+        async function query(q){
+            const r = await fetch('search_suggest.php?q='+encodeURIComponent(q));
+            if (!r.ok) return hide();
+            const items = await r.json();
+            render(items);
+        }
+
+        input.addEventListener('input', ()=>{
+            clearTimeout(timer);
+            const q = input.value.trim();
+            if (!q){ hide(); return; }
+            timer = setTimeout(()=>query(q), 180);
+        });
+
+        input.addEventListener('focus', ()=>{
+            if (menu.innerHTML) show();
+        });
+
+        document.addEventListener('click', (e)=>{
+            if (!form.contains(e.target)) hide();
+        });
+
+        // клавиатура: стрелки и enter
+        input.addEventListener('keydown', (e)=>{
+            const links = [...menu.querySelectorAll('.dropdown-item')];
+            if (!links.length) return;
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                idx += (e.key === 'ArrowDown' ? 1 : -1);
+                if (idx < 0) idx = links.length-1;
+                if (idx >= links.length) idx = 0;
+                links.forEach((a,i)=>a.classList.toggle('active', i===idx));
+            } else if (e.key === 'Enter') {
+                if (idx >= 0 && links[idx]) {
+                    e.preventDefault();
+                    window.location = links[idx].getAttribute('href');
+                }
+            } else if (e.key === 'Escape') {
+                hide();
+            }
         });
     })();
 </script>
+<script>
+    (function(){
+        document.querySelectorAll('table.responsive-cards').forEach(table=>{
+            const heads=[...table.querySelectorAll('thead th')].map(th=>th.textContent.trim());
+            table.querySelectorAll('tbody tr').forEach(tr=>{
+                tr.querySelectorAll('td').forEach((td,i)=>{
+                    if(!td.hasAttribute('data-th')) td.setAttribute('data-th', heads[i]||'');
+                });
+            });
+        });
+    })();
+</script>
+<script>
+    (function(){
+        const nav = document.querySelector('.navbar.bg-body');
+        if(!nav) return;
+        const on = () => nav.classList.toggle('nav-scrolled', window.scrollY>12);
+        document.addEventListener('scroll', on, {passive:true}); on();
+    })();
+</script>
+<script>
+    (function(){
+        const show = el => el.classList.add('sa-entrance');
+        const io = new IntersectionObserver(es => es.forEach(e => {
+            if(e.isIntersecting){ show(e.target); io.unobserve(e.target); }
+        }), {threshold:.06});
+        document.querySelectorAll('.card, .table tbody tr').forEach(el => io.observe(el));
+    })();
+</script>
+
 </body>
 </html>

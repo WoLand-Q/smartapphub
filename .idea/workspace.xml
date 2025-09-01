@@ -4,10 +4,35 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fce0f15f-ec5c-4820-b542-3867dc9d2ffb" name="Changes" comment="Обновил конфиги 7">
-      <change afterPath="$PROJECT_DIR$/docker/php-custom.ini" afterDir="false" />
+    <list default="true" id="fce0f15f-ec5c-4820-b542-3867dc9d2ffb" name="Changes" comment="Увеличил лимиты">
+      <change afterPath="$PROJECT_DIR$/lang/en.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lang/ru.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lang/uk.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/search.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/search_suggest.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/app.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.php" beforeDir="false" afterPath="$PROJECT_DIR$/db.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs.php" beforeDir="false" afterPath="$PROJECT_DIR$/docs.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs_edit.php" beforeDir="false" afterPath="$PROJECT_DIR$/docs_edit.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs_view.php" beforeDir="false" afterPath="$PROJECT_DIR$/docs_view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/helpers.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/login.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news.php" beforeDir="false" afterPath="$PROJECT_DIR$/news.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_edit.php" beforeDir="false" afterPath="$PROJECT_DIR$/news_edit.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_view.php" beforeDir="false" afterPath="$PROJECT_DIR$/news_view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/partials_admin_sidebar.php" beforeDir="false" afterPath="$PROJECT_DIR$/partials_admin_sidebar.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/partials_footer.php" beforeDir="false" afterPath="$PROJECT_DIR$/partials_footer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/partials_header.php" beforeDir="false" afterPath="$PROJECT_DIR$/partials_header.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin_edit.php" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_edit.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin_view.php" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugins.php" beforeDir="false" afterPath="$PROJECT_DIR$/plugins.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/release_edit.php" beforeDir="false" afterPath="$PROJECT_DIR$/release_edit.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/release_view.php" beforeDir="false" afterPath="$PROJECT_DIR$/release_view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/releases.php" beforeDir="false" afterPath="$PROJECT_DIR$/releases.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +95,8 @@
       <workItem from="1756189661556" duration="1290000" />
       <workItem from="1756291298031" duration="609000" />
       <workItem from="1756365841157" duration="8065000" />
-      <workItem from="1756455875456" duration="126000" />
+      <workItem from="1756455875456" duration="1366000" />
+      <workItem from="1756708347040" duration="7009000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
@@ -176,7 +202,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756379221541</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Увеличил лимиты">
+      <option name="closed" value="true" />
+      <created>1756456041727</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1756456041727</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -205,6 +239,7 @@
     <MESSAGE value="Обновил конфиги 5" />
     <MESSAGE value="Обновил конфиги 6" />
     <MESSAGE value="Обновил конфиги 7" />
-    <option name="LAST_COMMIT_MESSAGE" value="Обновил конфиги 7" />
+    <MESSAGE value="Увеличил лимиты" />
+    <option name="LAST_COMMIT_MESSAGE" value="Увеличил лимиты" />
   </component>
 </project>

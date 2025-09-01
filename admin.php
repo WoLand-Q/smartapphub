@@ -28,10 +28,10 @@ function ensure_dir($path){
 }
 
 /* ---------- deletes ---------- */
-if (isset($_GET['del_news']))    { db()->prepare('DELETE FROM news WHERE id=?')->execute([(int)$_GET['del_news']]);    flash_add('ok','Новину видалено');    header('Location: admin.php'); exit; }
-if (isset($_GET['del_release'])) { db()->prepare('DELETE FROM syrve_releases WHERE id=?')->execute([(int)$_GET['del_release']]); flash_add('ok','Реліз видалено'); header('Location: admin.php'); exit; }
-if (isset($_GET['del_doc']))     { db()->prepare('DELETE FROM docs WHERE id=?')->execute([(int)$_GET['del_doc']]);     flash_add('ok','Документ видалено');  header('Location: admin.php'); exit; }
-if (isset($_GET['del_plugin']))  { db()->prepare('DELETE FROM plugins WHERE id=?')->execute([(int)$_GET['del_plugin']]); flash_add('ok','Плагін видалено');  header('Location: admin.php'); exit; }
+if (isset($_GET['del_news']))    { db()->prepare('DELETE FROM news WHERE id=?')->execute([(int)$_GET['del_news']]);    flash_add('ok', __('News deleted'));    header('Location: admin.php'); exit; }
+if (isset($_GET['del_release'])) { db()->prepare('DELETE FROM syrve_releases WHERE id=?')->execute([(int)$_GET['del_release']]); flash_add('ok', __('Release deleted')); header('Location: admin.php'); exit; }
+if (isset($_GET['del_doc']))     { db()->prepare('DELETE FROM docs WHERE id=?')->execute([(int)$_GET['del_doc']]);     flash_add('ok', __('Document deleted'));  header('Location: admin.php'); exit; }
+if (isset($_GET['del_plugin']))  { db()->prepare('DELETE FROM plugins WHERE id=?')->execute([(int)$_GET['del_plugin']]); flash_add('ok', __('Plugin deleted'));  header('Location: admin.php'); exit; }
 
 /* ---------- creates ---------- */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -46,14 +46,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ensure_dir(__DIR__.'/uploads/docs');
                 $fnameRel = 'uploads/docs/doc_'.time().'.'.$ext;
                 if (!move_uploaded_file($_FILES['file']['tmp_name'], __DIR__.'/'.$fnameRel)) {
-                    throw new RuntimeException('Помилка збереження файла документа.');
+                    throw new RuntimeException(__('Document file save error.'));
                 }
                 $filePath = $fnameRel;
             }
             db()->prepare("INSERT INTO docs(title, description_md, link, file_path, tags, updated_at) VALUES(?,?,?,?,?,?)")
                 ->execute([$_POST['title'], $_POST['description_md'], $_POST['link']??'', $filePath, $_POST['tags']??'', now()]);
-            flash_add('ok','Документ додано');
-        }catch(Throwable $e){ flash_add('err','Помилка: '.$e->getMessage()); }
+            flash_add('ok', __('Document added'));
+        }catch(Throwable $e){ flash_add('err', __('Error').': '.$e->getMessage()); }
         header('Location: admin.php'); exit;
     }
 
@@ -64,8 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             db()->prepare("INSERT INTO plugins(slug,name,description,repo_url,homepage,is_active,category)
                            VALUES(?,?,?,?,?,1,?)")
                 ->execute([$slug,$_POST['name'],$_POST['description'],$_POST['repo_url']??'',$_POST['homepage']??'', $_POST['category']??'']);
-            flash_add('ok','Плагін додано');
-        }catch(Throwable $e){ flash_add('err','Помилка: '.$e->getMessage()); }
+            flash_add('ok', __('Plugin added'));
+        }catch(Throwable $e){ flash_add('err', __('Error').': '.$e->getMessage()); }
         header('Location: admin.php'); exit;
     }
 
@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $released_at = (string)$_POST['released_at'];
             $changelog   = (string)($_POST['changelog_md'] ?? '');
 
-            if ($pid<=0 || $version==='') throw new RuntimeException('Не заповнені обовʼязкові поля.');
+            if ($pid<=0 || $version==='') throw new RuntimeException(__('Required fields are empty.'));
             db()->prepare("INSERT INTO plugin_versions(plugin_id,version,channel,min_syrve,released_at,file_path,checksum,changelog_md)
                            VALUES(?,?,?,?,?,?,?,?)")
                 ->execute([$pid,$version,$channel,$min_syrve,$released_at,'','',$changelog]);
@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     $abs = __DIR__.'/'.$fnameRel;
                     if (!move_uploaded_file($_FILES['files']['tmp_name'][$i], $abs)) {
-                        throw new RuntimeException('Не вдалося зберегти файл: '.$orig);
+                        throw new RuntimeException(__('Failed to save file:').' '.$orig);
                     }
                     $checksum = hash_file('sha256', $abs) ?: '';
                     $size     = filesize($abs) ?: 0;
@@ -120,8 +120,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ->execute([$firstPath, hash_file('sha256', __DIR__.'/'.$firstPath), $ver_id]);
             }
 
-            flash_add('ok','Версію плагіна додано'.($firstPath?' і файли збережено':' (без файлів)'));
-        }catch(Throwable $e){ flash_add('err','Помилка: '.$e->getMessage()); }
+            flash_add('ok', __('Plugin version added').($firstPath?' · '.__('Files'):' · '.__('(no files)')));
+        }catch(Throwable $e){ flash_add('err', __('Error').': '.$e->getMessage()); }
         header('Location: admin.php'); exit;
     }
 
@@ -135,8 +135,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_POST['name'],$slug,$_POST['released_at'],$_POST['channel'],
                     isset($_POST['is_recommended'])?1:0, isset($_POST['is_lt'])?1:0, ''
                 ]);
-            flash_add('ok','Реліз додано');
-        }catch(Throwable $e){ flash_add('err','Помилка: '.$e->getMessage()); }
+            flash_add('ok', __('Release added'));
+        }catch(Throwable $e){ flash_add('err', __('Error').': '.$e->getMessage()); }
         header('Location: admin.php'); exit;
     }
 }
@@ -167,8 +167,8 @@ $lastFiles = db_all("
         #adminTabs .nav-link.active{box-shadow:inset 0 0 0 1px var(--sa-border);}
 
         /* таблицы */
-        .table thead th{position:sticky; top:0; background:var(--sa-card-bg); z-index:1; border-bottom:1px solid var(--sa-border);}
-        .table tbody tr:hover{background: color-mix(in srgb, var(--sa-brand) 6%, transparent);}
+        .table thead th{position:sticky; top:0; background:var(--sa-card); z-index:1; border-bottom:1px solid var(--sa-border);}
+        .table tbody tr:hover{background: color-mix(in srgb, var(--sa-brand-500) 6%, transparent);}
 
         /* layout: чтобы правая колонка НЕ перекрывала центральную */
         .admin-main { position: relative; z-index: 2; }
@@ -186,23 +186,21 @@ $lastFiles = db_all("
         .files-panel .btn-sm{ white-space:nowrap; }
 
         /* чтобы любые выпадашки не клипались */
-        /* таблицы внутри вкладок: по X — скролл, по Y — можно показывать дропдауны */
         .tab-content .table-responsive{overflow-x:auto; overflow-y:visible;}
 
-        /* конкретно для вкладки «Плагіни» — фиксированная раскладка и перенос слов,
-           чтобы длинные ячейки не распирали таблицу шире контейнера */
+        /* вкладка «Плагіни» — фиксированная раскладка и перенос слов */
         #pane-plugins .table{table-layout:fixed;}
         #pane-plugins .table td,
         #pane-plugins .table th{word-break:break-word;}
 
-        /* дропдауны поверх всего, но без расползания контейнеров */
+        /* дропдауны поверх всего */
         .dropdown-menu{z-index:1900;}
     </style>
 
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.php">Огляд</a></li>
-            <li class="breadcrumb-item active">Адмін</li>
+            <li class="breadcrumb-item"><a href="index.php"><?=__('Overview')?></a></li>
+            <li class="breadcrumb-item active"><?=__('Admin')?></li>
         </ol>
     </nav>
 
@@ -214,19 +212,19 @@ $lastFiles = db_all("
             <div class="card">
                 <div class="card-body">
                     <ul class="nav nav-pills mb-3" id="adminTabs">
-                        <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#pane-news">Контент</button></li>
-                        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#pane-plugins">Плагіни</button></li>
-                        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#pane-releases">Релізи</button></li>
-                        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#pane-docs">Документація</button></li>
+                        <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#pane-news"><?=__('Content')?></button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#pane-plugins"><?=__('Plugins')?></button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#pane-releases"><?=__('Releases')?></button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#pane-docs"><?=__('Docs')?></button></li>
                     </ul>
 
                     <div class="tab-content">
                         <!-- NEWS -->
                         <div class="tab-pane fade show active" id="pane-news">
-                            <h5 class="mb-2">Новини</h5>
+                            <h5 class="mb-2"><?=__('News')?></h5>
                             <div class="table-responsive">
                                 <table class="table align-middle">
-                                    <thead><tr><th>Заголовок</th><th>Теги</th><th>Дата</th><th class="text-end">Дії</th></tr></thead>
+                                    <thead><tr><th><?=__('Title')?></th><th><?=__('Tags')?></th><th><?=__('Date')?></th><th class="text-end"><?=__('Actions')?></th></tr></thead>
                                     <tbody>
                                     <?php foreach($news as $n): ?>
                                         <tr>
@@ -234,11 +232,11 @@ $lastFiles = db_all("
                                             <td class="text-muted small"><?=e($n['tags'] ?? '')?></td>
                                             <td class="text-muted small"><?=e($n['created_at'])?></td>
                                             <td class="text-end">
-                                                <a class="btn btn-sm btn-outline-primary" href="news_edit.php?id=<?=$n['id']?>">Редагувати</a>
-                                                <a class="btn btn-sm btn-outline-danger" href="admin.php?del_news=<?=$n['id']?>" onclick="return confirm('Видалити?')">Видалити</a>
+                                                <a class="btn btn-sm btn-outline-primary" href="news_edit.php?id=<?=$n['id']?>"><?=__('Edit')?></a>
+                                                <a class="btn btn-sm btn-outline-danger" href="admin.php?del_news=<?=$n['id']?>" onclick="return confirm('<?=__('Delete')?>?')"><?=__('Delete')?></a>
                                             </td>
                                         </tr>
-                                    <?php endforeach; if(empty($news)) echo '<tr><td colspan="4" class="text-muted">Порожньо</td></tr>'; ?>
+                                    <?php endforeach; if(empty($news)) echo '<tr><td colspan="4" class="text-muted">'.__('Empty').'</td></tr>'; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -246,10 +244,10 @@ $lastFiles = db_all("
 
                         <!-- PLUGINS -->
                         <div class="tab-pane fade" id="pane-plugins">
-                            <h5 class="mb-2">Плагіни</h5>
+                            <h5 class="mb-2"><?=__('Plugins')?></h5>
                             <div class="table-responsive">
                                 <table class="table align-middle">
-                                    <thead><tr><th>Назва</th><th>Категорія</th><th>Опис</th><th>Repo</th><th>Сайт</th><th class="text-end">Дії</th></tr></thead>
+                                    <thead><tr><th><?=__('Name')?></th><th><?=__('Category')?></th><th><?=__('Short description')?></th><th>Repo</th><th><?=__('Site')?></th><th class="text-end"><?=__('Actions')?></th></tr></thead>
                                     <tbody>
                                     <?php foreach($plugins as $p): ?>
                                         <tr>
@@ -257,15 +255,15 @@ $lastFiles = db_all("
                                             <td class="small"><?=e($p['category']??'')?></td>
                                             <td class="text-truncate" style="max-width:320px"><?=e($p['description'])?></td>
                                             <td class="small"><?= $p['repo_url'] ? '<a href="'.e($p['repo_url']).'" target="_blank">repo</a>' : '—' ?></td>
-                                            <td class="small"><?= $p['homepage'] ? '<a href="'.e($p['homepage']).'" target="_blank">site</a>' : '—' ?></td>
+                                            <td class="small"><?= $p['homepage'] ? '<a href="'.e($p['homepage']).'" target="_blank">'.__('Site').'</a>' : '—' ?></td>
                                             <td class="text-end">
                                                 <div class="btn-group">
-                                                    <a class="btn btn-sm btn-outline-primary" href="plugin_edit.php?slug=<?=urlencode($p['slug'])?>">Редагувати</a>
-                                                    <a class="btn btn-sm btn-outline-danger" href="admin.php?del_plugin=<?=$p['id']?>" onclick="return confirm('Видалити?')">Видалити</a>
+                                                    <a class="btn btn-sm btn-outline-primary" href="plugin_edit.php?slug=<?=urlencode($p['slug'])?>"><?=__('Edit')?></a>
+                                                    <a class="btn btn-sm btn-outline-danger" href="admin.php?del_plugin=<?=$p['id']?>" onclick="return confirm('<?=__('Delete')?>?')"><?=__('Delete')?></a>
                                                 </div>
                                             </td>
                                         </tr>
-                                    <?php endforeach; if (empty($plugins)) echo '<tr><td colspan="6" class="text-muted">Поки немає</td></tr>'; ?>
+                                    <?php endforeach; if (empty($plugins)) echo '<tr><td colspan="6" class="text-muted">'.__('Empty').'</td></tr>'; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -273,22 +271,26 @@ $lastFiles = db_all("
 
                         <!-- RELEASES -->
                         <div class="tab-pane fade" id="pane-releases">
-                            <h5 class="mb-2">Релізи Syrve</h5>
+                            <h5 class="mb-2"><?=__('Syrve releases')?></h5>
                             <div class="table-responsive">
                                 <table class="table align-middle">
-                                    <thead><tr><th>Назва</th><th>Канал</th><th>Дата</th><th class="text-end">Дії</th></tr></thead>
+                                    <thead><tr><th><?=__('Title')?></th><th><?=__('Channel')?></th><th><?=__('Date')?></th><th class="text-end"><?=__('Actions')?></th></tr></thead>
                                     <tbody>
                                     <?php foreach($rels as $r): ?>
                                         <tr>
                                             <td><a href="release_view.php?slug=<?=urlencode($r['slug'])?>"><?=e($r['name'])?></a></td>
-                                            <td class="text-muted small"><?=e($r['channel'])?><?= $r['is_recommended'] ? ' · рек.' : '' ?><?= $r['is_lt'] ? ' · LT' : '' ?></td>
+                                            <td class="text-muted small">
+                                                <?=e($r['channel'])?>
+                                                <?= $r['is_recommended'] ? ' · '.__('Recommended') : '' ?>
+                                                <?= $r['is_lt'] ? ' · '.__('LT') : '' ?>
+                                            </td>
                                             <td class="text-muted small"><?=e($r['released_at'])?></td>
                                             <td class="text-end">
-                                                <a class="btn btn-sm btn-outline-primary" href="release_edit.php?id=<?=$r['id']?>">Редагувати</a>
-                                                <a class="btn btn-sm btn-outline-danger" href="admin.php?del_release=<?=$r['id']?>" onclick="return confirm('Видалити?')">Видалити</a>
+                                                <a class="btn btn-sm btn-outline-primary" href="release_edit.php?id=<?=$r['id']?>"><?=__('Edit')?></a>
+                                                <a class="btn btn-sm btn-outline-danger" href="admin.php?del_release=<?=$r['id']?>" onclick="return confirm('<?=__('Delete')?>?')"><?=__('Delete')?></a>
                                             </td>
                                         </tr>
-                                    <?php endforeach; if (empty($rels)) echo '<tr><td colspan="4" class="text-muted">Порожньо</td></tr>'; ?>
+                                    <?php endforeach; if (empty($rels)) echo '<tr><td colspan="4" class="text-muted">'.__('Empty').'</td></tr>'; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -296,19 +298,19 @@ $lastFiles = db_all("
 
                         <!-- DOCS -->
                         <div class="tab-pane fade" id="pane-docs">
-                            <h5 class="mb-2">Документація</h5>
+                            <h5 class="mb-2"><?=__('Documentation')?></h5>
                             <div class="table-responsive">
                                 <table class="table align-middle">
-                                    <thead><tr><th>Назва</th><th>Теги</th><th>Оновлено</th><th class="text-end">Дії</th></tr></thead>
+                                    <thead><tr><th><?=__('Name')?></th><th><?=__('Tags')?></th><th><?=__('Updated')?></th><th class="text-end"><?=__('Actions')?></th></tr></thead>
                                     <tbody>
                                     <?php foreach($docs as $d): ?>
                                         <tr>
                                             <td><?=e($d['title'])?></td>
                                             <td class="text-muted small"><?=e($d['tags'])?></td>
                                             <td class="text-muted small"><?=e($d['updated_at'])?></td>
-                                            <td class="text-end"><a class="btn btn-sm btn-outline-danger" href="admin.php?del_doc=<?=$d['id']?>" onclick="return confirm('Видалити?')">Видалити</a></td>
+                                            <td class="text-end"><a class="btn btn-sm btn-outline-danger" href="admin.php?del_doc=<?=$d['id']?>" onclick="return confirm('<?=__('Delete')?>?')"><?=__('Delete')?></a></td>
                                         </tr>
-                                    <?php endforeach; if (empty($docs)) echo '<tr><td colspan="4" class="text-muted">Порожньо</td></tr>'; ?>
+                                    <?php endforeach; if (empty($docs)) echo '<tr><td colspan="4" class="text-muted">'.__('Empty').'</td></tr>'; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -324,7 +326,7 @@ $lastFiles = db_all("
                 <!-- Last uploaded files -->
                 <div class="card card-hover files-panel">
                     <div class="card-body">
-                        <h6 class="card-title mb-2">Останні завантажені файли</h6>
+                        <h6 class="card-title mb-2"><?=__('Last uploaded files')?></h6>
                         <?php if($lastFiles): ?>
                             <ul class="list-group list-group-flush">
                                 <?php foreach($lastFiles as $f): ?>
@@ -333,7 +335,7 @@ $lastFiles = db_all("
                                             <div class="file-title"><?=e($f['plugin_name'])?> · v<?=e($f['version'])?></div>
                                             <div class="file-meta"><?=e($f['label'])?> (<?=strtoupper(e($f['ext']))?> · <?=number_format((int)$f['size_bytes']/1024,1)?> KB)</div>
                                         </div>
-                                        <a class="btn btn-sm btn-outline-primary" href="<?=e($f['file_path'])?>" download>Скачати</a>
+                                        <a class="btn btn-sm btn-outline-primary" href="<?=e($f['file_path'])?>" download><?=__('Download')?></a>
                                     </li>
                                 <?php endforeach; ?>
                             </ul>
@@ -350,63 +352,65 @@ $lastFiles = db_all("
                             }
                             ?>
                         <?php else: ?>
-                            <div class="text-muted small">Файлів поки що немає.</div>
+                            <div class="text-muted small"><?=__('No files')?></div>
                         <?php endif; ?>
                     </div>
                 </div>
 
                 <!-- Add plugin -->
                 <div class="card card-hover"><div class="card-body">
-                        <h6 class="card-title mb-2">Додати плагін</h6>
+                        <h6 class="card-title mb-2"><?=__('Add plugin')?></h6>
                         <form method="post">
                             <input type="hidden" name="action" value="add_plugin">
-                            <div class="mb-2"><input class="form-control" name="name" placeholder="Назва плагіна" required></div>
-                            <div class="mb-2"><input class="form-control" name="category" placeholder="Категорія (напр. CRM, Принтери)"></div>
-                            <div class="mb-2"><textarea class="form-control" name="description" rows="2" placeholder="Короткий опис" required></textarea></div>
-                            <div class="mb-2"><input class="form-control" name="repo_url" placeholder="Repo URL"></div>
-                            <div class="mb-2"><input class="form-control" name="homepage" placeholder="Homepage"></div>
-                            <button class="btn btn-outline-primary w-100">Додати</button>
+                            <div class="mb-2"><input class="form-control" name="name" placeholder="<?=__('Name')?>" required></div>
+                            <div class="mb-2"><input class="form-control" name="category" placeholder="<?=__('Category placeholder')?>"></div>
+                            <div class="mb-2"><textarea class="form-control" name="description" rows="2" placeholder="<?=__('Short description')?>" required></textarea></div>
+                            <div class="mb-2"><input class="form-control" name="repo_url" placeholder="<?=__('Repo URL')?>"></div>
+                            <div class="mb-2"><input class="form-control" name="homepage" placeholder="<?=__('Homepage')?>"></div>
+                            <button class="btn btn-outline-primary w-100"><?=__('Save')?></button>
                         </form>
                     </div></div>
 
                 <!-- Add plugin version -->
                 <div class="card card-hover"><div class="card-body">
-                        <h6 class="card-title mb-2">Версія плагіна</h6>
+                        <h6 class="card-title mb-2"><?=__('Plugin version')?></h6>
                         <form method="post" enctype="multipart/form-data">
                             <input type="hidden" name="action" value="add_plugin_version">
                             <div class="mb-2">
                                 <select class="form-select" name="plugin_id" required>
-                                    <option value="">Оберіть плагін…</option>
+                                    <option value=""><?=__('Select a plugin…')?></option>
                                     <?php foreach($plugins as $p): ?><option value="<?=$p['id']?>"><?=e($p['name'])?></option><?php endforeach; ?>
                                 </select>
                             </div>
-                            <div class="mb-2"><input class="form-control" name="version" placeholder="1.2.3" required></div>
-                            <div class="mb-2"><input class="form-control" name="min_syrve" placeholder="мін. Syrve (напр. 9.1)" required></div>
+                            <div class="mb-2"><input class="form-control" name="version" placeholder="<?=__('Version')?>" required></div>
+                            <div class="mb-2"><input class="form-control" name="min_syrve" placeholder="<?=__('Min. Syrve')?>" required></div>
                             <div class="mb-2">
-                                <select class="form-select" name="channel"><option>stable</option><option>beta</option><option>preview</option></select>
+                                <select class="form-select" name="channel">
+                                    <option>stable</option><option>beta</option><option>preview</option>
+                                </select>
                             </div>
-                            <div class="mb-2"><input class="form-control" type="date" name="released_at" required></div>
+                            <div class="mb-2"><input class="form-control" type="date" name="released_at" required placeholder="<?=__('Release date')?>"></div>
                             <div class="mb-2">
-                                <label class="form-label small mb-1">Файли (можна кілька)</label>
+                                <label class="form-label small mb-1"><?=__('Files (multiple allowed)')?></label>
                                 <input class="form-control" type="file" name="files[]" multiple>
-                                <div class="form-text">Перший файл стане «основним». Інші збережуться як додаткові.</div>
+                                <div class="form-text"><?=__('First file becomes primary')?></div>
                             </div>
-                            <div class="mb-2"><textarea class="form-control" name="changelog_md" rows="2" placeholder="Changelog (Markdown)"></textarea></div>
-                            <button class="btn btn-outline-primary w-100">Додати</button>
+                            <div class="mb-2"><textarea class="form-control" name="changelog_md" rows="2" placeholder="<?=__('Changelog (Markdown)')?>"></textarea></div>
+                            <button class="btn btn-outline-primary w-100"><?=__('Save')?></button>
                         </form>
                     </div></div>
 
                 <!-- Add doc -->
                 <div class="card card-hover"><div class="card-body">
-                        <h6 class="card-title mb-2">Додати документ</h6>
+                        <h6 class="card-title mb-2"><?=__('Add document')?></h6>
                         <form method="post" enctype="multipart/form-data">
                             <input type="hidden" name="action" value="add_doc">
-                            <div class="mb-2"><input class="form-control" name="title" placeholder="Назва" required></div>
-                            <div class="mb-2"><input class="form-control" name="tags" placeholder="Теги"></div>
-                            <div class="mb-2"><textarea class="form-control" name="description_md" rows="3" placeholder="Опис (Markdown)" required></textarea></div>
+                            <div class="mb-2"><input class="form-control" name="title" placeholder="<?=__('Name')?>" required></div>
+                            <div class="mb-2"><input class="form-control" name="tags" placeholder="<?=__('Tags')?>"></div>
+                            <div class="mb-2"><textarea class="form-control" name="description_md" rows="3" placeholder="<?=__('Description (Markdown)')?>" required></textarea></div>
                             <div class="mb-2"><input class="form-control" name="link" placeholder="https://…"></div>
                             <div class="mb-2"><input class="form-control" type="file" name="file"></div>
-                            <button class="btn btn-primary w-100">Зберегти</button>
+                            <button class="btn btn-primary w-100"><?=__('Save')?></button>
                         </form>
                     </div></div>
             </div>

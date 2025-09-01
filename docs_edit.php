@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 require_once __DIR__.'/helpers.php';
 require_admin();
 
-$id = (int)($_GET['id'] ?? 0);
+$id  = (int)($_GET['id'] ?? 0);
 $doc = $id ? db_one('SELECT * FROM docs WHERE id=?', [$id]) : null;
 
 if($_SERVER['REQUEST_METHOD']==='POST'){
@@ -12,13 +13,12 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     $link  = trim($_POST['link'] ?? '');
     $filePath = $doc['file_path'] ?? '';
 
-    // upload (optional)
     if(!empty($_FILES['file']['name']) && $_FILES['file']['error']===UPLOAD_ERR_OK){
-        $ext=pathinfo($_FILES['file']['name'],PATHINFO_EXTENSION);
+        $ext = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
         if(!is_dir(__DIR__.'/uploads/docs')) mkdir(__DIR__.'/uploads/docs',0777,true);
-        $fname='uploads/docs/doc_'.time().'.'.$ext;
+        $fname = 'uploads/docs/doc_'.time().'.'.$ext;
         move_uploaded_file($_FILES['file']['tmp_name'], __DIR__.'/'.$fname);
-        $filePath=$fname;
+        $filePath = $fname;
     }
 
     if($id){
@@ -36,9 +36,9 @@ include __DIR__.'/partials_header.php';
 ?>
 <nav aria-label="breadcrumb" class="mb-3">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.php">Огляд</a></li>
-        <li class="breadcrumb-item"><a href="docs.php">Документація</a></li>
-        <li class="breadcrumb-item active"><?=$doc?'Редагування':'Новий документ'?></li>
+        <li class="breadcrumb-item"><a href="index.php"><?=__('Overview')?></a></li>
+        <li class="breadcrumb-item"><a href="docs.php"><?=__('Documentation')?></a></li>
+        <li class="breadcrumb-item active"><?= $doc ? __('Edit') : __('Add document') ?></li>
     </ol>
 </nav>
 
@@ -46,39 +46,40 @@ include __DIR__.'/partials_header.php';
     <div class="card-body">
         <form method="post" enctype="multipart/form-data" class="row g-3">
             <div class="col-md-7">
-                <label class="form-label">Назва</label>
+                <label class="form-label"><?=__('Name')?></label>
                 <input class="form-control" name="title" required value="<?=e($doc['title'] ?? '')?>">
             </div>
             <div class="col-md-5">
-                <label class="form-label">Теги (через кому)</label>
+                <label class="form-label"><?=__('Tags (comma separated)')?></label>
                 <input class="form-control" name="tags" value="<?=e($doc['tags'] ?? '')?>">
             </div>
 
             <div class="col-12">
-                <label class="form-label">Опис (Markdown)</label>
+                <label class="form-label"><?=__('Description (Markdown)')?></label>
                 <textarea class="form-control" name="description_md" rows="10"><?=e($doc['description_md'] ?? '')?></textarea>
             </div>
 
             <div class="col-md-7">
-                <label class="form-label">Зовнішнє посилання (опціонально)</label>
+                <label class="form-label"><?=__('External link (optional)')?></label>
                 <input class="form-control" name="link" placeholder="https://…" value="<?=e($doc['link'] ?? '')?>">
             </div>
             <div class="col-md-5">
-                <label class="form-label">Файл (опціонально)</label>
+                <label class="form-label"><?=__('File (optional)')?></label>
                 <input class="form-control" type="file" name="file">
                 <?php if(!empty($doc['file_path'])): ?>
-                    <div class="form-text">Поточний файл: <a href="<?=e($doc['file_path'])?>" target="_blank"><?=basename($doc['file_path'])?></a></div>
+                    <div class="form-text"><?=__('Current file')?>:
+                        <a href="<?=e($doc['file_path'])?>" target="_blank"><?=basename($doc['file_path'])?></a>
+                    </div>
                 <?php endif; ?>
             </div>
 
             <div class="col-12 d-flex gap-2">
-                <button class="btn btn-primary">Зберегти</button>
-                <a class="btn btn-outline-secondary" href="<?=$id ? 'docs_view.php?id='.$id : 'docs.php'?>">Скасувати</a>
+                <button class="btn btn-primary"><?=__('Save')?></button>
+                <a class="btn btn-outline-secondary" href="<?=$id ? 'docs_view.php?id='.$id : 'docs.php'?>"><?=__('Cancel')?></a>
             </div>
         </form>
     </div>
 </div>
-
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
 <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>

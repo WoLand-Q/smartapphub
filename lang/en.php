@@ -1,0 +1,121 @@
+<?php return [
+    // Global / navbar / footer
+    'Overview' => 'Overview',
+    'News' => 'News',
+    'Releases' => 'Releases',
+    'Plugins' => 'Plugins',
+    'Docs' => 'Documentation',
+    'Admin' => 'Admin',
+    'Admin panel' => 'Admin panel',
+    'Login' => 'Login',
+    'Logout' => 'Logout',
+    'Search across hub' => 'Search across hub',
+    'Search' => 'Search',
+    'Theme' => 'Theme',
+    'Light' => 'Light',
+    'Dark' => 'Dark',
+    'System' => 'System',
+    'Language' => 'Language',
+    'Ukrainian' => 'Ukrainian',
+    'Russian' => 'Russian',
+    'English' => 'English',
+
+    // Common UI
+    'Open' => 'Open',
+    'Edit' => 'Edit',
+    'Delete' => 'Delete',
+    'Save' => 'Save',
+    'Cancel' => 'Cancel',
+    'Download' => 'Download',
+    'Files' => 'Files',
+    'Other files' => 'Other files',
+    'Actions' => 'Actions',
+    'Title' => 'Title',
+    'Tags' => 'Tags',
+    'Date' => 'Date',
+    'Updated' => 'Updated',
+    'Recommended' => 'Recommended',
+    'LT' => 'LT',
+    'Empty' => 'Empty',
+    'Not found' => 'Not found',
+    'To list' => 'To list',
+    'See all' => 'See all',
+    'All integrations' => 'All integrations',
+    'Go to' => 'Go to',
+
+    // Index (overview)
+    'Latest news' => 'Latest news',
+    'Releases' => 'Releases',
+    'Integrations / Plugins' => 'Integrations / Plugins',
+    'Documentation' => 'Documentation',
+
+    // Login
+    'Username' => 'Username',
+    'Password' => 'Password',
+    'Please enter login and password' => 'Please enter login and password',
+    'Invalid login or password' => 'Invalid login or password',
+    'Sign in' => 'Sign in',
+
+    // News list / view
+    'Read' => 'Read',
+    'Per page:' => 'Per page:',
+    'No news yet.' => 'No news yet.',
+    'News not found' => 'News not found',
+
+    // Docs list / view / edit
+    'Add document' => 'Add document',
+    'Name' => 'Name',
+    'Updated at' => 'Updated at',
+    'No documents.' => 'No documents.',
+    'Document not found' => 'Document not found',
+    'Description (Markdown)' => 'Description (Markdown)',
+    'External link (optional)' => 'External link (optional)',
+    'File (optional)' => 'File (optional)',
+    'Current file' => 'Current file',
+    'Open link' => 'Open link',
+    'Download file' => 'Download file',
+
+    // Admin
+    'Content' => 'Content',
+    'Add plugin' => 'Add plugin',
+    'Category' => 'Category',
+    'Category placeholder' => 'Category (e.g., CRM, Printers)',
+    'Short description' => 'Short description',
+    'Repo URL' => 'Repo URL',
+    'Homepage' => 'Homepage',
+    'Plugin version' => 'Plugin version',
+    'Select a plugin…' => 'Select a plugin…',
+    'Version' => 'Version',
+    'Min. Syrve' => 'Min. Syrve',
+    'Channel' => 'Channel',
+    'Release date' => 'Release date',
+    'Files (multiple allowed)' => 'Files (multiple allowed)',
+    'First file becomes primary' => 'The first file will become the “primary”. Others will be saved as additional.',
+    'Changelog (Markdown)' => 'Changelog (Markdown)',
+    'Last uploaded files' => 'Last uploaded files',
+
+    // Plugins list
+    'Search plugins…' => 'Search plugins…',
+    'Your Syrve version (e.g., 9.2)' => 'Your Syrve version (e.g., 9.2)',
+    'Tip Syrve' => 'Tip: enter your Syrve version and we will highlight the most compatible version.',
+    'Recommended version' => 'Recommended version',
+    'min. Syrve' => 'min. Syrve',
+    'Downloads' => 'Downloads',
+    'No versions' => 'No versions',
+    'No files' => 'No files',
+
+    // Plugin view
+    'Plugin not found' => 'Plugin not found',
+    'Site' => 'Site',
+    'Repo' => 'Repo',
+
+    // Channels (badges)
+    'stable' => 'stable',
+    'beta' => 'beta',
+    'preview' => 'preview',
+
+    // Search page (if used)
+    'Search results' => 'Search results',
+    'Nothing found' => 'Nothing found',
+    'Found results count' => 'Found %d results',
+];

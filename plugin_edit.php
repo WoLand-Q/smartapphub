@@ -17,7 +17,7 @@ $pl = db_one("SELECT * FROM plugins WHERE slug=?", [$slug]);
 if(!$pl){
     http_response_code(404);
     include __DIR__.'/partials_header.php';
-    echo '<div class="container my-4">Плагін не знайдено</div>';
+    echo '<div class="container my-4">'.__('Plugin not found').'</div>';
     include __DIR__.'/partials_footer.php';
     exit;
 }
@@ -116,156 +116,187 @@ include __DIR__.'/partials_header.php';
 
 $versions = db_all("SELECT * FROM plugin_versions WHERE plugin_id=? ORDER BY datetime(released_at) DESC, id DESC", [$pl['id']]);
 ?>
-    <style>
-        /* ===== plugin_edit.php (scoped) ===== */
-        .plugin-edit .file-chip{
-            display:inline-flex;align-items:center;gap:.4rem;
-            padding:.24rem .55rem;border-radius:999px;
-            border:1px solid var(--sa-border);font-size:.8rem;
-            background:linear-gradient(180deg, color-mix(in srgb, var(--sa-card-bg) 86%, #fff) 0%, var(--sa-card-bg) 100%);
-            max-width: 420px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-        }
-        .plugin-edit .file-chip .dot{width:.5rem;height:.5rem;border-radius:999px;background:#94a3b8}
-        .plugin-edit .file-chip.apk .dot{background:#10b981}
-        .plugin-edit .file-chip.zip .dot{background:#6366f1}
-        .plugin-edit .file-chip.jar .dot{background:#f59e0b}
+<style>
+    /* ===== plugin_edit.php (scoped) ===== */
+    .plugin-edit .file-chip{
+        display:inline-flex;align-items:center;gap:.4rem;
+        padding:.24rem .55rem;border-radius:999px;
+        border:1px solid var(--sa-border);font-size:.8rem;
+        background:linear-gradient(180deg, color-mix(in srgb, var(--sa-card-bg) 86%, #fff) 0%, var(--sa-card-bg) 100%);
+        max-width: 420px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    }
+    .plugin-edit .file-chip .dot{width:.5rem;height:.5rem;border-radius:999px;background:#94a3b8}
+    .plugin-edit .file-chip.apk .dot{background:#10b981}
+    .plugin-edit .file-chip.zip .dot{background:#6366f1}
+    .plugin-edit .file-chip.jar .dot{background:#f59e0b}
 
-        .plugin-edit .list-group-item{display:flex;align-items:center;justify-content:space-between;gap:.75rem;flex-wrap:wrap;}
-        .plugin-edit .list-group-item .flex-grow-1{min-width:0;}
-        .plugin-edit .list-group-item .btn-group{flex:0 0 auto;}
-        /* чтобы тени/абсолюты внутри карточек не перекрывали соседние элементы */
-        .plugin-edit .card{position:relative; z-index:1;}
-        @media (max-width: 576px){
-            .plugin-edit .file-chip{max-width:260px;}
-        }
-    </style>
+    .plugin-edit .list-group-item{display:flex;align-items:center;justify-content:space-between;gap:.75rem;flex-wrap:wrap;}
+    .plugin-edit .list-group-item .flex-grow-1{min-width:0;}
+    .plugin-edit .list-group-item .btn-group{flex:0 0 auto;}
+    .plugin-edit .card{position:relative; z-index:1;}
+    @media (max-width: 576px){ .plugin-edit .file-chip{max-width:260px;} }
+</style>
 
-    <nav aria-label="breadcrumb" class="mb-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.php">Огляд</a></li>
-            <li class="breadcrumb-item"><a href="admin.php#pane-plugins">Адмін</a></li>
-            <li class="breadcrumb-item active">Редагування плагіна</li>
-        </ol>
-    </nav>
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.php"><?=__('Overview')?></a></li>
+        <li class="breadcrumb-item"><a href="admin.php#pane-plugins"><?=__('Admin')?></a></li>
+        <li class="breadcrumb-item active"><?=__('Edit plugin')?></li>
+    </ol>
+</nav>
 
-<?php if(!empty($_GET['saved'])): ?><div class="alert alert-success">Збережено метадані плагіна.</div><?php endif; ?>
-<?php if(!empty($_GET['vsaved'])): ?><div class="alert alert-success">Версію створено.</div><?php endif; ?>
-<?php if(!empty($_GET['vdel'])): ?><div class="alert alert-warning">Версію видалено.</div><?php endif; ?>
-<?php if(!empty($_GET['fsaved'])): ?><div class="alert alert-success">Файли збережено.</div><?php endif; ?>
-<?php if(!empty($_GET['fdel'])): ?><div class="alert alert-warning">Файл видалено.</div><?php endif; ?>
+<?php if(!empty($_GET['saved'])): ?><div class="alert alert-success"><?=__('Saved')?></div><?php endif; ?>
+<?php if(!empty($_GET['vsaved'])): ?><div class="alert alert-success"><?=__('Version created')?></div><?php endif; ?>
+<?php if(!empty($_GET['vdel'])): ?><div class="alert alert-warning"><?=__('Version deleted')?></div><?php endif; ?>
+<?php if(!empty($_GET['fsaved'])): ?><div class="alert alert-success"><?=__('Files saved')?></div><?php endif; ?>
+<?php if(!empty($_GET['fdel'])): ?><div class="alert alert-warning"><?=__('File deleted')?></div><?php endif; ?>
 
-    <div class="plugin-edit">
-        <div class="row g-3">
-            <div class="col-lg-6">
-                <div class="card card-hover">
-                    <div class="card-body">
-                        <h5 class="card-title mb-3">Плагін: <?=e($pl['name'])?></h5>
-                        <form method="post">
-                            <input type="hidden" name="action" value="save_meta">
-                            <div class="mb-2"><label class="form-label">Назва</label><input class="form-control" name="name" value="<?=e($pl['name'])?>" required></div>
-                            <div class="mb-2"><label class="form-label">Категорія</label><input class="form-control" name="category" value="<?=e($pl['category'])?>"></div>
-                            <div class="mb-2"><label class="form-label">Опис</label><textarea class="form-control" name="description" rows="4"><?=e($pl['description'])?></textarea></div>
-                            <div class="mb-2"><label class="form-label">Repo URL</label><input class="form-control" name="repo_url" value="<?=e($pl['repo_url'])?>"></div>
-                            <div class="mb-2"><label class="form-label">Homepage</label><input class="form-control" name="homepage" value="<?=e($pl['homepage'])?>"></div>
-                            <div class="form-check mb-3"><input class="form-check-input" type="checkbox" id="ia" name="is_active" <?=$pl['is_active']?'checked':''?>><label class="form-check-label" for="ia">Активний</label></div>
-                            <div class="d-flex gap-2">
-                                <button class="btn btn-primary">Зберегти</button>
-                                <a class="btn btn-outline-secondary" href="plugins.php">До списку</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="card card-hover mt-3">
-                    <div class="card-body">
-                        <h6 class="card-title">Створити нову версію</h6>
-                        <form method="post">
-                            <input type="hidden" name="action" value="add_version">
-                            <div class="row g-2">
-                                <div class="col-md-4"><input class="form-control" name="version" placeholder="1.2.3" required></div>
-                                <div class="col-md-3">
-                                    <select class="form-select" name="channel">
-                                        <option>stable</option><option>beta</option><option>preview</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-3"><input class="form-control" name="min_syrve" placeholder="мін. Syrve" required></div>
-                                <div class="col-md-2"><input class="form-control" type="date" name="released_at" required></div>
-                            </div>
-                            <div class="mt-2"><textarea class="form-control" name="changelog_md" rows="3" placeholder="Changelog (Markdown)"></textarea></div>
-                            <button class="btn btn-outline-primary mt-2">Створити версію</button>
-                        </form>
-                    </div>
+<div class="plugin-edit">
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <div class="card card-hover">
+                <div class="card-body">
+                    <h5 class="card-title mb-3"><?=__('Plugin')?>: <?=e($pl['name'])?></h5>
+                    <form method="post">
+                        <input type="hidden" name="action" value="save_meta">
+                        <div class="mb-2">
+                            <label class="form-label"><?=__('Name')?></label>
+                            <input class="form-control" name="name" value="<?=e($pl['name'])?>" required>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label"><?=__('Category')?></label>
+                            <input class="form-control" name="category" value="<?=e($pl['category'])?>">
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label"><?=__('Description')?></label>
+                            <textarea class="form-control" name="description" rows="4"><?=e($pl['description'])?></textarea>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Repo URL</label>
+                            <input class="form-control" name="repo_url" value="<?=e($pl['repo_url'])?>">
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label"><?=__('Homepage')?></label>
+                            <input class="form-control" name="homepage" value="<?=e($pl['homepage'])?>">
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="ia" name="is_active" <?=$pl['is_active']?'checked':''?>>
+                            <label class="form-check-label" for="ia"><?=__('Active')?></label>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-primary"><?=__('Save')?></button>
+                            <a class="btn btn-outline-secondary" href="plugins.php"><?=__('Back to list')?></a>
+                        </div>
+                    </form>
                 </div>
             </div>
 
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title mb-2">Версії та файли</h5>
-                        <?php if(!$versions): ?>
-                            <div class="text-muted">Поки немає версій.</div>
-                        <?php endif; ?>
+            <div class="card card-hover mt-3">
+                <div class="card-body">
+                    <h6 class="card-title"><?=__('Create new version')?></h6>
+                    <form method="post">
+                        <input type="hidden" name="action" value="add_version">
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <input class="form-control" name="version" placeholder="<?=__('Version')?>" required>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select" name="channel">
+                                    <option>stable</option><option>beta</option><option>preview</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-control" name="min_syrve" placeholder="<?=__('Min. Syrve')?>" required>
+                            </div>
+                            <div class="col-md-2">
+                                <input class="form-control" type="date" name="released_at" required placeholder="<?=__('Release date')?>">
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <textarea class="form-control" name="changelog_md" rows="3" placeholder="<?=__('Changelog (Markdown)')?>"></textarea>
+                        </div>
+                        <button class="btn btn-outline-primary mt-2"><?=__('Create version')?></button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-                        <?php foreach($versions as $v):
-                            $files = db_all("SELECT * FROM plugin_files WHERE plugin_version_id=? ORDER BY id", [$v['id']]);
-                            ?>
-                            <div class="border rounded p-3 mb-3" id="v<?=$v['id']?>">
-                                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <strong>v<?=e($v['version'])?></strong>
-                                        <span class="badge text-bg-info"><?=e($v['channel'])?></span>
-                                        <span class="text-muted small">min <?=e($v['min_syrve'])?> · <?=e($v['released_at'])?></span>
-                                    </div>
-                                    <form method="post" onsubmit="return confirm('Видалити версію і всі її файли?')">
-                                        <input type="hidden" name="action" value="delete_version">
-                                        <input type="hidden" name="version_id" value="<?=$v['id']?>">
-                                        <button class="btn btn-sm btn-outline-danger">Видалити версію</button>
-                                    </form>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-2"><?=__('Versions and files')?></h5>
+                    <?php if(!$versions): ?>
+                        <div class="text-muted"><?=__('No versions yet')?></div>
+                    <?php endif; ?>
+
+                    <?php foreach($versions as $v):
+                        $files = db_all("SELECT * FROM plugin_files WHERE plugin_version_id=? ORDER BY id", [$v['id']]);
+                        ?>
+                        <div class="border rounded p-3 mb-3" id="v<?=$v['id']?>">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <strong>v<?=e($v['version'])?></strong>
+                                    <span class="badge text-bg-info"><?=e($v['channel'])?></span>
+                                    <span class="text-muted small">
+                                        <?=__('min')?> <?=e($v['min_syrve'])?> · <?=e($v['released_at'])?>
+                                    </span>
                                 </div>
+                                <form method="post" onsubmit="return confirm('<?=__('Delete version and all its files?')?>')">
+                                    <input type="hidden" name="action" value="delete_version">
+                                    <input type="hidden" name="version_id" value="<?=$v['id']?>">
+                                    <button class="btn btn-sm btn-outline-danger"><?=__('Delete version')?></button>
+                                </form>
+                            </div>
 
-                                <?php if($v['changelog_md']): ?>
-                                    <div class="mt-2 md"><?= md($v['changelog_md']) ?></div>
+                            <?php if($v['changelog_md']): ?>
+                                <div class="mt-2 md"><?= md($v['changelog_md']) ?></div>
+                            <?php endif; ?>
+
+                            <div class="mt-3">
+                                <h6 class="mb-2"><?=__('Files')?></h6>
+                                <?php if($files): ?>
+                                    <ul class="list-group list-group-flush">
+                                        <?php foreach($files as $f): ?>
+                                            <li class="list-group-item d-flex align-items-center justify-content-between">
+                                                <div class="flex-grow-1">
+                                                    <span class="file-chip <?=e($f['ext'])?>">
+                                                        <span class="dot"></span><?=e($f['label'] ?: basename($f['file_path']))?>
+                                                    </span>
+                                                    <span class="text-muted small ms-2">
+                                                        <?=number_format((int)$f['size_bytes']/1024,1)?> KB
+                                                    </span>
+                                                </div>
+                                                <div class="btn-group">
+                                                    <a class="btn btn-sm btn-outline-primary" href="<?=e($f['file_path'])?>" download><?=__('Download')?></a>
+                                                    <form method="post" onsubmit="return confirm('<?=__('Delete file?')?>')">
+                                                        <input type="hidden" name="action" value="delete_file">
+                                                        <input type="hidden" name="file_id" value="<?=$f['id']?>">
+                                                        <button class="btn btn-sm btn-outline-danger"><?=__('Delete')?></button>
+                                                    </form>
+                                                </div>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                <?php else: ?>
+                                    <div class="text-muted small"><?=__('No files')?></div>
                                 <?php endif; ?>
 
-                                <div class="mt-3">
-                                    <h6 class="mb-2">Файли</h6>
-                                    <?php if($files): ?>
-                                        <ul class="list-group list-group-flush">
-                                            <?php foreach($files as $f): ?>
-                                                <li class="list-group-item">
-                                                    <div class="flex-grow-1">
-                                                        <span class="file-chip <?=e($f['ext'])?>"><span class="dot"></span><?=e($f['label'] ?: basename($f['file_path']))?></span>
-                                                        <span class="text-muted small ms-2"><?=number_format((int)$f['size_bytes']/1024,1)?> KB</span>
-                                                    </div>
-                                                    <div class="btn-group">
-                                                        <a class="btn btn-sm btn-outline-primary" href="<?=e($f['file_path'])?>" download>Скачати</a>
-                                                        <form method="post" onsubmit="return confirm('Видалити файл?')">
-                                                            <input type="hidden" name="action" value="delete_file">
-                                                            <input type="hidden" name="file_id" value="<?=$f['id']?>">
-                                                            <button class="btn btn-sm btn-outline-danger">Видалити</button>
-                                                        </form>
-                                                    </div>
-                                                </li>
-                                            <?php endforeach; ?>
-                                        </ul>
-                                    <?php else: ?>
-                                        <div class="text-muted small">Немає файлів.</div>
-                                    <?php endif; ?>
-
-                                    <form method="post" enctype="multipart/form-data" class="mt-2">
-                                        <input type="hidden" name="action" value="upload_files">
-                                        <input type="hidden" name="version_id" value="<?=$v['id']?>">
-                                        <label class="form-label small mb-1">Додати файли до v<?=e($v['version'])?></label>
-                                        <input class="form-control" type="file" name="files[]" multiple>
-                                        <button class="btn btn-sm btn-outline-primary mt-2">Завантажити</button>
-                                    </form>
-                                </div>
+                                <form method="post" enctype="multipart/form-data" class="mt-2">
+                                    <input type="hidden" name="action" value="upload_files">
+                                    <input type="hidden" name="version_id" value="<?=$v['id']?>">
+                                    <label class="form-label small mb-1">
+                                        <?=__('Add files to version')?> v<?=e($v['version'])?>
+                                    </label>
+                                    <input class="form-control" type="file" name="files[]" multiple>
+                                    <button class="btn btn-sm btn-outline-primary mt-2"><?=__('Upload')?></button>
+                                </form>
                             </div>
-                        <?php endforeach; ?>
-                    </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-<?php include __DIR__.'/partials_footer.php';
+<?php include __DIR__.'/partials_footer.php'; ?>

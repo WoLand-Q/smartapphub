@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__.'/helpers.php';
 include __DIR__.'/partials_header.php';
 
 // latest data for overview
@@ -9,7 +10,7 @@ $docs  = db_all("SELECT id,title,tags,updated_at FROM docs ORDER BY datetime(upd
 ?>
 
 <nav aria-label="breadcrumb" class="mb-3">
-    <ol class="breadcrumb"><li class="breadcrumb-item active">Огляд</li></ol>
+    <ol class="breadcrumb"><li class="breadcrumb-item active"><?=__('Overview')?></li></ol>
 </nav>
 
 <div class="row g-3">
@@ -18,8 +19,8 @@ $docs  = db_all("SELECT id,title,tags,updated_at FROM docs ORDER BY datetime(upd
         <div class="card card-hover">
             <div class="card-body">
                 <div class="d-flex align-items-center mb-2">
-                    <h5 class="mb-0">Новини</h5>
-                    <a class="btn btn-sm btn-pill btn-outline-primary ms-auto" href="news.php">До всіх</a>
+                    <h5 class="mb-0"><?=__('News')?></h5>
+                    <a class="btn btn-sm btn-pill btn-outline-primary ms-auto" href="news.php"><?=__('See all')?></a>
                 </div>
                 <ul class="list-group list-group-flush">
                     <?php foreach($news as $n): ?>
@@ -28,7 +29,7 @@ $docs  = db_all("SELECT id,title,tags,updated_at FROM docs ORDER BY datetime(upd
                             <?php if($n['tags']): ?><span class="chip ms-1"><?=e($n['tags'])?></span><?php endif; ?>
                             <span class="small text-muted ms-auto"><?=e($n['created_at'])?></span>
                         </li>
-                    <?php endforeach; if(empty($news)) echo '<li class="list-group-item text-muted">Новин поки немає.</li>'; ?>
+                    <?php endforeach; if(empty($news)) echo '<li class="list-group-item text-muted">'.__('No news yet').'</li>'; ?>
                 </ul>
             </div>
         </div>
@@ -39,19 +40,19 @@ $docs  = db_all("SELECT id,title,tags,updated_at FROM docs ORDER BY datetime(upd
         <div class="card card-hover">
             <div class="card-body">
                 <div class="d-flex align-items-center mb-2">
-                    <h5 class="mb-0">Релізи Syrve</h5>
-                    <a class="btn btn-sm btn-pill btn-outline-primary ms-auto" href="releases.php">До списку</a>
+                    <h5 class="mb-0"><?=__('Releases')?></h5>
+                    <a class="btn btn-sm btn-pill btn-outline-primary ms-auto" href="releases.php"><?=__('Go to list')?></a>
                 </div>
                 <ul class="list-group list-group-flush">
                     <?php foreach($rels as $r): ?>
                         <li class="list-group-item d-flex align-items-center">
                             <a class="me-2" href="release_view.php?slug=<?=urlencode($r['slug'])?>"><?=e($r['name'])?></a>
                             <span class="chip"><?=e($r['channel'])?></span>
-                            <?php if($r['is_recommended']): ?><span class="badge bg-success ms-2">Рекомендовано</span><?php endif; ?>
-                            <?php if($r['is_lt']): ?><span class="badge bg-secondary ms-1">LT</span><?php endif; ?>
+                            <?php if($r['is_recommended']): ?><span class="badge bg-success ms-2"><?=__('Recommended')?></span><?php endif; ?>
+                            <?php if($r['is_lt']): ?><span class="badge bg-secondary ms-1"><?=__('LT')?></span><?php endif; ?>
                             <span class="small text-muted ms-auto"><?=e($r['released_at'])?></span>
                         </li>
-                    <?php endforeach; if(empty($rels)) echo '<li class="list-group-item text-muted">Ще немає релізів.</li>'; ?>
+                    <?php endforeach; if(empty($rels)) echo '<li class="list-group-item text-muted">'.__('No releases yet').'</li>'; ?>
                 </ul>
             </div>
         </div>
@@ -62,8 +63,8 @@ $docs  = db_all("SELECT id,title,tags,updated_at FROM docs ORDER BY datetime(upd
         <div class="card card-hover">
             <div class="card-body">
                 <div class="d-flex align-items-center mb-2">
-                    <h5 class="mb-0">Інтеграції / Плагіни</h5>
-                    <a class="btn btn-sm btn-pill btn-outline-primary ms-auto" href="plugins.php">Всі інтеграції</a>
+                    <h5 class="mb-0"><?=__('Integrations / Plugins')?></h5>
+                    <a class="btn btn-sm btn-pill btn-outline-primary ms-auto" href="plugins.php"><?=__('All integrations')?></a>
                 </div>
 
                 <div class="grid-cards">
@@ -75,7 +76,7 @@ $docs  = db_all("SELECT id,title,tags,updated_at FROM docs ORDER BY datetime(upd
                             </div>
                             <div class="text-muted small"><?=e($p['description'])?></div>
                         </div>
-                    <?php endforeach; if(empty($plugs)) echo '<div class="text-muted">Плагінів поки немає.</div>'; ?>
+                    <?php endforeach; if(empty($plugs)) echo '<div class="text-muted">'.__('No plugins yet').'</div>'; ?>
                 </div>
             </div>
         </div>
@@ -86,12 +87,12 @@ $docs  = db_all("SELECT id,title,tags,updated_at FROM docs ORDER BY datetime(upd
         <div class="card card-hover">
             <div class="card-body">
                 <div class="d-flex align-items-center mb-2">
-                    <h5 class="mb-0">Документація</h5>
-                    <a class="btn btn-sm btn-pill btn-outline-primary ms-auto" href="docs.php">Перейти</a>
+                    <h5 class="mb-0"><?=__('Documentation')?></h5>
+                    <a class="btn btn-sm btn-pill btn-outline-primary ms-auto" href="docs.php"><?=__('Go')?></a>
                 </div>
                 <div class="table-responsive">
-                    <table class="table align-middle mb-0">
-                        <thead><tr><th>Назва</th><th>Теги</th><th class="text-end">Оновлено</th></tr></thead>
+                    <table class="table align-middle mb-0 responsive-cards">
+                        <thead><tr><th><?=__('Title')?></th><th><?=__('Tags')?></th><th class="text-end"><?=__('Updated')?></th></tr></thead>
                         <tbody>
                         <?php foreach($docs as $d): ?>
                             <tr>
@@ -99,7 +100,7 @@ $docs  = db_all("SELECT id,title,tags,updated_at FROM docs ORDER BY datetime(upd
                                 <td class="text-muted small"><?=e($d['tags'])?></td>
                                 <td class="text-end text-muted small"><?=e($d['updated_at'])?></td>
                             </tr>
-                        <?php endforeach; if(empty($docs)) echo '<tr><td colspan="3" class="text-muted">Немає документів.</td></tr>'; ?>
+                        <?php endforeach; if(empty($docs)) echo '<tr><td colspan="3" class="text-muted">'.__('No documents yet').'</td></tr>'; ?>
                         </tbody>
                     </table>
                 </div>

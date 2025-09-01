@@ -36,15 +36,15 @@ function news_excerpt(array $row, int $limit = 240): string {
 ?>
 <nav aria-label="breadcrumb" class="mb-3">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.php">Огляд</a></li>
-        <li class="breadcrumb-item active">Новини</li>
+        <li class="breadcrumb-item"><a href="index.php"><?=__('Overview')?></a></li>
+        <li class="breadcrumb-item active"><?=__('News')?></li>
     </ol>
 </nav>
 
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
-    <h3 class="mb-0">Новини</h3>
+    <h3 class="mb-0"><?=__('News')?></h3>
     <form method="get" class="d-flex align-items-center gap-2">
-        <label class="text-muted small">На сторінку:</label>
+        <label class="text-muted small"><?=__('Per page')?>:</label>
         <select class="form-select form-select-sm" name="per" onchange="this.form.submit()">
             <?php foreach($allowed_per as $n): ?>
                 <option value="<?=$n?>" <?=$n===$per?'selected':''?>><?=$n?></option>
@@ -72,10 +72,10 @@ function news_excerpt(array $row, int $limit = 240): string {
 
             <p class="mb-2 text-muted"><?= e(news_excerpt($n)) ?></p>
 
-            <a class="btn btn-sm btn-outline-primary btn-pill" href="news_view.php?id=<?=$n['id']?>">Читати</a>
+            <a class="btn btn-sm btn-outline-primary btn-pill" href="news_view.php?id=<?=$n['id']?>"><?=__('Read')?></a>
         </div>
     </div>
-<?php endforeach; if(empty($news)) echo '<p class="text-muted">Новини відсутні.</p>'; ?>
+<?php endforeach; if(empty($news)) echo '<p class="text-muted">'.__('No news').'</p>'; ?>
 
 <?php
 /* ---------- пагинация ---------- */
@@ -84,10 +84,10 @@ if($pages > 1):
     $start = max(1, $page - $win);
     $end   = min($pages, $page + $win);
     ?>
-    <nav aria-label="Пагінація">
+    <nav aria-label="<?=__('Pagination')?>">
         <ul class="pagination">
             <li class="page-item <?=$page<=1?'disabled':''?>">
-                <a class="page-link" href="?page=<?=max(1,$page-1)?>&per=<?=$per?>" aria-label="Previous">&laquo;</a>
+                <a class="page-link" href="?page=<?=max(1,$page-1)?>&per=<?=$per?>" aria-label="<?=__('Previous')?>">&laquo;</a>
             </li>
 
             <?php if($start > 1): ?>
@@ -107,7 +107,7 @@ if($pages > 1):
             <?php endif; ?>
 
             <li class="page-item <?=$page>=$pages?'disabled':''?>">
-                <a class="page-link" href="?page=<?=min($pages,$page+1)?>&per=<?=$per?>" aria-label="Next">&raquo;</a>
+                <a class="page-link" href="?page=<?=min($pages,$page+1)?>&per=<?=$per?>" aria-label="<?=__('Next')?>">&raquo;</a>
             </li>
         </ul>
     </nav>

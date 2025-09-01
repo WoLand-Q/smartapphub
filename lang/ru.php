@@ -1,0 +1,121 @@
+<?php return [
+    // Global / navbar / footer
+    'Overview' => 'Обзор',
+    'News' => 'Новости',
+    'Releases' => 'Релизы',
+    'Plugins' => 'Интеграции',
+    'Docs' => 'Документация',
+    'Admin' => 'Админ',
+    'Admin panel' => 'Админ панель',
+    'Login' => 'Вход',
+    'Logout' => 'Выход',
+    'Search across hub' => 'Поиск по всему хабу',
+    'Search' => 'Поиск',
+    'Theme' => 'Тема',
+    'Light' => 'Светлая',
+    'Dark' => 'Тёмная',
+    'System' => 'Системная',
+    'Language' => 'Язык',
+    'Ukrainian' => 'Украинский',
+    'Russian' => 'Русский',
+    'English' => 'English',
+
+    // Common UI
+    'Open' => 'Открыть',
+    'Edit' => 'Редактировать',
+    'Delete' => 'Удалить',
+    'Save' => 'Сохранить',
+    'Cancel' => 'Отмена',
+    'Download' => 'Скачать',
+    'Files' => 'Файлы',
+    'Other files' => 'Другие файлы',
+    'Actions' => 'Действия',
+    'Title' => 'Заголовок',
+    'Tags' => 'Теги',
+    'Date' => 'Дата',
+    'Updated' => 'Обновлено',
+    'Recommended' => 'Рекомендовано',
+    'LT' => 'LT',
+    'Empty' => 'Пусто',
+    'Not found' => 'Не найдено',
+    'To list' => 'К списку',
+    'See all' => 'Ко всем',
+    'All integrations' => 'Все интеграции',
+    'Go to' => 'Перейти',
+
+    // Index (overview)
+    'Latest news' => 'Новости',
+    'Releases' => 'Релизы',
+    'Integrations / Plugins' => 'Интеграции / Плагины',
+    'Documentation' => 'Документация',
+
+    // Login
+    'Username' => 'Логин',
+    'Password' => 'Пароль',
+    'Please enter login and password' => 'Введите логин и пароль',
+    'Invalid login or password' => 'Неверный логин или пароль',
+    'Sign in' => 'Войти',
+
+    // News list / view
+    'Read' => 'Читать',
+    'Per page:' => 'На страницу:',
+    'No news yet.' => 'Новостей пока нет.',
+    'News not found' => 'Новость не найдена',
+
+    // Docs list / view / edit
+    'Add document' => 'Добавить документ',
+    'Name' => 'Название',
+    'Updated at' => 'Обновлено',
+    'No documents.' => 'Документов нет.',
+    'Document not found' => 'Документ не найден',
+    'Description (Markdown)' => 'Описание (Markdown)',
+    'External link (optional)' => 'Внешняя ссылка (опционально)',
+    'File (optional)' => 'Файл (опционально)',
+    'Current file' => 'Текущий файл',
+    'Open link' => 'Открыть ссылку',
+    'Download file' => 'Скачать файл',
+
+    // Admin
+    'Content' => 'Контент',
+    'Add plugin' => 'Добавить плагин',
+    'Category' => 'Категория',
+    'Category placeholder' => 'Категория (напр. CRM, Принтеры)',
+    'Short description' => 'Краткое описание',
+    'Repo URL' => 'Repo URL',
+    'Homepage' => 'Сайт',
+    'Plugin version' => 'Версия плагина',
+    'Select a plugin…' => 'Выберите плагин…',
+    'Version' => 'Версия',
+    'Min. Syrve' => 'Мин. Syrve',
+    'Channel' => 'Канал',
+    'Release date' => 'Дата',
+    'Files (multiple allowed)' => 'Файлы (можно несколько)',
+    'First file becomes primary' => 'Первый файл станет «основным». Остальные сохранятся как дополнительные.',
+    'Changelog (Markdown)' => 'Changelog (Markdown)',
+    'Last uploaded files' => 'Последние загруженные файлы',
+
+    // Plugins list
+    'Search plugins…' => 'Поиск плагинов…',
+    'Your Syrve version (e.g., 9.2)' => 'Ваша версия Syrve (напр. 9.2)',
+    'Tip Syrve' => 'Подсказка: введите свою версию Syrve, и мы подсветим наиболее совместимую версию.',
+    'Recommended version' => 'Рек. версия',
+    'min. Syrve' => 'мин. Syrve',
+    'Downloads' => 'Загрузки',
+    'No versions' => 'Версий нет',
+    'No files' => 'Файлов нет',
+
+    // Plugin view
+    'Plugin not found' => 'Плагин не найден',
+    'Site' => 'Сайт',
+    'Repo' => 'Repo',
+
+    // Channels
+    'stable' => 'stable',
+    'beta' => 'beta',
+    'preview' => 'preview',
+
+    // Search page
+    'Search results' => 'Результаты поиска',
+    'Nothing found' => 'Ничего не найдено',
+    'Found results count' => 'Найдено результатов: %d',
+];
