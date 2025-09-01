@@ -1,7 +1,6 @@
 ﻿# Smart Apps Hub
 /uploads/
-/data/
 .idea/
 *.zip
 *.apk
-*.db
+
