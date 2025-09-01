@@ -2,7 +2,7 @@
 require_once __DIR__.'/helpers.php';
 include __DIR__.'/partials_header.php';
 
-// latest data for overview
+
 $news  = db_all("SELECT id,title,tags,created_at FROM news ORDER BY datetime(created_at) DESC LIMIT 5");
 $rels  = db_all("SELECT name,slug,released_at,channel,is_recommended,is_lt FROM syrve_releases ORDER BY datetime(released_at) DESC LIMIT 5");
 $plugs = db_all("SELECT id,name,description,category FROM plugins WHERE is_active=1 ORDER BY LOWER(category), LOWER(name) LIMIT 8");
