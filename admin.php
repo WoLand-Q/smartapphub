@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: admin.php'); exit;
     }
 
-    // plugin version (+ multiple files)
+    // plugin version
     if ($a === 'add_plugin_version') {
         try{
             $pid         = (int)$_POST['plugin_id'];
@@ -162,21 +162,14 @@ $lastFiles = db_all("
 ");
 ?>
     <style>
-        /* ===== admin.php (scoped) ===== */
         #adminTabs .nav-link{border-radius:999px;}
         #adminTabs .nav-link.active{box-shadow:inset 0 0 0 1px var(--sa-border);}
-
-        /* таблицы */
         .table thead th{position:sticky; top:0; background:var(--sa-card); z-index:1; border-bottom:1px solid var(--sa-border);}
         .table tbody tr:hover{background: color-mix(in srgb, var(--sa-brand-500) 6%, transparent);}
-
-        /* layout: чтобы правая колонка НЕ перекрывала центральную */
         .admin-main { position: relative; z-index: 2; }
         .admin-main .card { position: relative; z-index: 2; }
-        .admin-sticky { position: sticky; top: 1rem; z-index: 1; } /* ниже центрального контейнера */
+        .admin-sticky { position: sticky; top: 1rem; z-index: 1; }
         @media (max-width: 991.98px){ .admin-sticky { position: static; z-index:auto; } }
-
-        /* блок последних файлов */
         .files-panel .list-group{ max-height:56vh; overflow:auto; }
         @media (max-width:575.98px){ .files-panel .list-group{ max-height:none; } }
         .files-panel .list-group-item{ display:flex; gap:.75rem; align-items:center; justify-content:space-between; }
@@ -184,16 +177,10 @@ $lastFiles = db_all("
         .files-panel .file-title{ font-weight:600; font-size:.9rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
         .files-panel .file-meta{ font-size:.82rem; color:var(--sa-muted,#6c757d); overflow-wrap:anywhere; }
         .files-panel .btn-sm{ white-space:nowrap; }
-
-        /* чтобы любые выпадашки не клипались */
         .tab-content .table-responsive{overflow-x:auto; overflow-y:visible;}
-
-        /* вкладка «Плагіни» — фиксированная раскладка и перенос слов */
         #pane-plugins .table{table-layout:fixed;}
         #pane-plugins .table td,
         #pane-plugins .table th{word-break:break-word;}
-
-        /* дропдауны поверх всего */
         .dropdown-menu{z-index:1900;}
     </style>
 
@@ -315,7 +302,7 @@ $lastFiles = db_all("
                                 </table>
                             </div>
                         </div>
-                    </div><!-- /tab-content -->
+                    </div>
                 </div>
             </div>
         </div>

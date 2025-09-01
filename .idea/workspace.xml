@@ -4,36 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fce0f15f-ec5c-4820-b542-3867dc9d2ffb" name="Changes" comment="Увеличил лимиты">
-      <change afterPath="$PROJECT_DIR$/lang/en.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lang/ru.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lang/uk.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/search.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/search_suggest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/app.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.php" beforeDir="false" afterPath="$PROJECT_DIR$/db.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs.php" beforeDir="false" afterPath="$PROJECT_DIR$/docs.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs_edit.php" beforeDir="false" afterPath="$PROJECT_DIR$/docs_edit.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs_view.php" beforeDir="false" afterPath="$PROJECT_DIR$/docs_view.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/helpers.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/login.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news.php" beforeDir="false" afterPath="$PROJECT_DIR$/news.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_edit.php" beforeDir="false" afterPath="$PROJECT_DIR$/news_edit.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_view.php" beforeDir="false" afterPath="$PROJECT_DIR$/news_view.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/partials_admin_sidebar.php" beforeDir="false" afterPath="$PROJECT_DIR$/partials_admin_sidebar.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/partials_footer.php" beforeDir="false" afterPath="$PROJECT_DIR$/partials_footer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/partials_header.php" beforeDir="false" afterPath="$PROJECT_DIR$/partials_header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin_edit.php" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_edit.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin_view.php" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_view.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins.php" beforeDir="false" afterPath="$PROJECT_DIR$/plugins.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/release_edit.php" beforeDir="false" afterPath="$PROJECT_DIR$/release_edit.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/release_view.php" beforeDir="false" afterPath="$PROJECT_DIR$/release_view.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/releases.php" beforeDir="false" afterPath="$PROJECT_DIR$/releases.php" afterDir="false" />
-    </list>
+    <list default="true" id="fce0f15f-ec5c-4820-b542-3867dc9d2ffb" name="Changes" comment="Подчистил" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -96,7 +67,7 @@
       <workItem from="1756291298031" duration="609000" />
       <workItem from="1756365841157" duration="8065000" />
       <workItem from="1756455875456" duration="1366000" />
-      <workItem from="1756708347040" duration="7009000" />
+      <workItem from="1756708347040" duration="9727000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
@@ -210,7 +181,55 @@
       <option name="project" value="LOCAL" />
       <updated>1756456041727</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Обновил UI UX, добавил многоязычность, дополнил анимации и улучшил адаптивность">
+      <option name="closed" value="true" />
+      <created>1756722132911</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1756722132911</updated>
+    </task>
+    <task id="LOCAL-00016" summary="добавил реадми">
+      <option name="closed" value="true" />
+      <created>1756722338056</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1756722338056</updated>
+    </task>
+    <task id="LOCAL-00017" summary="поправил реадми">
+      <option name="closed" value="true" />
+      <created>1756722388161</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1756722388161</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Подчистиил код">
+      <option name="closed" value="true" />
+      <created>1756737883675</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1756737883675</updated>
+    </task>
+    <task id="LOCAL-00019" summary="удалил">
+      <option name="closed" value="true" />
+      <created>1756738071303</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1756738071303</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Подчистил">
+      <option name="closed" value="true" />
+      <created>1756738228631</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1756738228631</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -240,6 +259,12 @@
     <MESSAGE value="Обновил конфиги 6" />
     <MESSAGE value="Обновил конфиги 7" />
     <MESSAGE value="Увеличил лимиты" />
-    <option name="LAST_COMMIT_MESSAGE" value="Увеличил лимиты" />
+    <MESSAGE value="Обновил UI UX, добавил многоязычность, дополнил анимации и улучшил адаптивность" />
+    <MESSAGE value="добавил реадми" />
+    <MESSAGE value="поправил реадми" />
+    <MESSAGE value="Подчистиил код" />
+    <MESSAGE value="удалил" />
+    <MESSAGE value="Подчистил" />
+    <option name="LAST_COMMIT_MESSAGE" value="Подчистил" />
   </component>
 </project>

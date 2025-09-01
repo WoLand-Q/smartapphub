@@ -140,7 +140,7 @@ function migrate(PDO $pdo): void {
     }
 
     /* ---------- FTS5 Search (поиск по всему хабу) ---------- */
-    // ВАЖНО: FTS5 должен быть собран в PHP (обычно есть в оф. образах).
+
     $pdo->exec("
         CREATE VIRTUAL TABLE IF NOT EXISTS search_all USING fts5(
             type,              -- 'news' | 'doc' | 'plugin'

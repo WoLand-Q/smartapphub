@@ -1,22 +1,21 @@
-/* ===== Design Tokens v2 ===== */
+
 :root{
     /* semantic surfaces */
-    --sa-bg:        #f7f8fb;  /* page background */
-    --sa-card:      #ffffff;  /* cards/nav surfaces */
-    --sa-card-2:    color-mix(in srgb, var(--sa-card) 92%, #fff); /* subtle inner */
+    --sa-bg:        #f7f8fb;
+    --sa-card:      #ffffff;
+    --sa-card-2:    color-mix(in srgb, var(--sa-card) 92%, #fff);
     --sa-border:    #e9edf3;
     --sa-ink:       #0b1220;
     --sa-muted:     #687385;
 
-    /* brand scale (OKLCH-ish, но с sRGB совместимостью) */
     --sa-brand-50:  #eef2ff;
     --sa-brand-100: #e0e7ff;
     --sa-brand-200: #c7d2fe;
     --sa-brand-300: #a5b4fc;
     --sa-brand-400: #818cf8;
-    --sa-brand-500: #6366f1;  /* primary */
+    --sa-brand-500: #6366f1;
     --sa-brand-600: #5458d9;
-    --sa-accent:    #22c55e;  /* success/positive */
+    --sa-accent:    #22c55e;
 
     /* state colors */
     --sa-info:   #3b82f6;
@@ -29,12 +28,11 @@
     --sa-shadow:    0 14px 34px rgba(12,16,26,.10);
 
     /* motion */
-    --sa-time-1: .14s;  /* tap */
-    --sa-time-2: .24s;  /* hover/default */
-    --sa-time-3: .38s;  /* entrance */
+    --sa-time-1: .14s;
+    --sa-time-2: .24s;
+    --sa-time-3: .38s;
     --sa-ease: cubic-bezier(.2,.55,.18,.99);
 
-    /* системные формы/скроллбары уважают тему */
     color-scheme: light dark;
 }
 
@@ -51,7 +49,7 @@ html[data-theme="dark"]{
     --sa-brand-200:#1e2640;
     --sa-brand-300:#293259;
     --sa-brand-400:#34407a;
-    --sa-brand-500:#5164ff; /* чуть светлее в дарке для контраста */
+    --sa-brand-500:#5164ff;
     --sa-brand-600:#7ea2ff;
 
     --sa-shadow-sm: 0 6px 18px rgba(0,0,0,.35);
@@ -113,7 +111,7 @@ body{ background:var(--sa-bg); color:var(--sa-ink); }
 }
 .navbar-brand:hover{ filter:saturate(1.2) brightness(1.02); }
 
-/* keyframes */
+
 @keyframes sa-fade-up   { from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
 @keyframes sa-scale-in  { from{opacity:.8; transform:scale(.98)} to{opacity:1; transform:scale(1)} }
 @keyframes sa-drop      { from{opacity:0; transform:translateY(-8px)} to{opacity:1; transform:none} }
@@ -143,7 +141,6 @@ body{ background:var(--sa-bg); color:var(--sa-ink); }
     padding-block: .35rem !important;
 }
 
-/* уважаем reduce motion */
 @media (prefers-reduced-motion: reduce){
     * { animation-duration:.001ms !important; animation-iteration-count:1 !important; transition:none !important; }
 }
@@ -216,7 +213,7 @@ body{ background:var(--sa-bg); color:var(--sa-ink); }
     will-change: width;     /* оптимизация анимации */
 }
 #sa-nprog.active{ opacity:1; }
-/* -------- Prose (контент новостей/доков) -------- */
+
 .prose{ line-height:1.7; color:var(--sa-ink); }
 html[data-theme="dark"] .prose{ color:var(--sa-ink); }
 
@@ -237,7 +234,7 @@ html[data-theme="dark"] .prose{ color:var(--sa-ink); }
     margin:.6rem 0;
 }
 
-/* таблички и код не ломают вёрстку */
+
 .prose table{ width:100%; border-collapse:collapse; }
 .prose pre{
     background:#0b1020; color:#e2e8f0;
