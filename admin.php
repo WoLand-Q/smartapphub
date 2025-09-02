@@ -53,6 +53,23 @@ if (isset($_GET['del_plugin'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $a = $_POST['action'] ?? '';
 
+    // NEWS (quick add)
+    if ($a === 'add_news') {
+        try{
+            $title   = trim((string)($_POST['title'] ?? ''));
+            $tags    = trim((string)($_POST['tags'] ?? ''));
+            $author  = trim((string)($_POST['author'] ?? ''));
+            $body_md = (string)($_POST['body_md'] ?? '');
+
+            if ($title === '') $title = __('(untitled)');
+            db()->prepare('INSERT INTO news(title, body_md, body_html, tags, created_at, author) VALUES(?,?,?,?,?,?)')
+                ->execute([$title, $body_md, '', $tags, now(), $author]);
+
+            flash_add('ok', __('News added'));
+        }catch(Throwable $e){ flash_add('err', __('Error').': '.$e->getMessage()); }
+        header('Location: admin.php#pane-news', true, 303); exit;
+    }
+
     // document
     if ($a === 'add_doc') {
         try{
@@ -328,6 +345,25 @@ include __DIR__.'/partials_header.php';
         <!-- RIGHT -->
         <div class="col-lg-4">
             <div class="admin-sticky d-flex flex-column gap-3">
+
+                <!-- Add news -->
+                <div class="card card-hover">
+                    <div class="card-body">
+                        <h6 class="card-title mb-2"><?=__('Add news')?></h6>
+                        <form method="post">
+                            <input type="hidden" name="action" value="add_news">
+                            <div class="mb-2"><input class="form-control" name="title" placeholder="<?=__('Title')?>"></div>
+                            <div class="mb-2"><input class="form-control" name="tags" placeholder="<?=__('Tags (comma separated)')?>"></div>
+                            <div class="mb-2"><input class="form-control" name="author" placeholder="<?=__('Author')?>"></div>
+                            <div class="mb-2"><textarea class="form-control" name="body_md" rows="4" placeholder="<?=__('Body (Markdown)')?>"></textarea></div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-primary w-100"><?=__('Save')?></button>
+                                <a class="btn btn-outline-secondary" href="news.php"><?=__('Open')?></a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
                 <!-- Last uploaded files -->
                 <div class="card card-hover files-panel">
                     <div class="card-body">

@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fce0f15f-ec5c-4820-b542-3867dc9d2ffb" name="Changes" comment="Подчистил">
+    <list default="true" id="fce0f15f-ec5c-4820-b542-3867dc9d2ffb" name="Changes" comment="Обновил языковый перевод, добавил просмотр ченджлога &#10;Добавил возможность добавлять релизы">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/app.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lang/en.php" beforeDir="false" afterPath="$PROJECT_DIR$/lang/en.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lang/ru.php" beforeDir="false" afterPath="$PROJECT_DIR$/lang/ru.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lang/uk.php" beforeDir="false" afterPath="$PROJECT_DIR$/lang/uk.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin_view.php" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_view.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins.php" beforeDir="false" afterPath="$PROJECT_DIR$/plugins.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +71,7 @@
       <workItem from="1756365841157" duration="8065000" />
       <workItem from="1756455875456" duration="1366000" />
       <workItem from="1756708347040" duration="10764000" />
-      <workItem from="1756796759684" duration="3446000" />
+      <workItem from="1756796759684" duration="4765000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
@@ -263,7 +257,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756738659565</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Обновил языковый перевод, добавил просмотр ченджлога &#10;Добавил возможность добавлять релизы">
+      <option name="closed" value="true" />
+      <created>1756824690587</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1756824690588</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -299,6 +301,7 @@
     <MESSAGE value="Подчистиил код" />
     <MESSAGE value="удалил" />
     <MESSAGE value="Подчистил" />
-    <option name="LAST_COMMIT_MESSAGE" value="Подчистил" />
+    <MESSAGE value="Обновил языковый перевод, добавил просмотр ченджлога &#10;Добавил возможность добавлять релизы" />
+    <option name="LAST_COMMIT_MESSAGE" value="Обновил языковый перевод, добавил просмотр ченджлога &#10;Добавил возможность добавлять релизы" />
   </component>
 </project>
