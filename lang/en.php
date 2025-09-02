@@ -1,8 +1,10 @@
-<?php return [
+<?php
+return [
     // Global / navbar / footer
     'Overview' => 'Overview',
     'News' => 'News',
     'Releases' => 'Releases',
+    'Syrve releases' => 'Syrve releases',
     'Plugins' => 'Plugins',
     'Docs' => 'Documentation',
     'Admin' => 'Admin',
@@ -11,6 +13,7 @@
     'Logout' => 'Logout',
     'Search across hub' => 'Search across hub',
     'Search' => 'Search',
+    'Toggle navigation' => 'Toggle navigation',
     'Theme' => 'Theme',
     'Light' => 'Light',
     'Dark' => 'Dark',
@@ -42,10 +45,13 @@
     'See all' => 'See all',
     'All integrations' => 'All integrations',
     'Go to' => 'Go to',
+    'Other' => 'Other',
+    'Close' => 'Close',
+    'View' => 'View',
+    'file' => 'file',
 
     // Index (overview)
     'Latest news' => 'Latest news',
-    'Releases' => 'Releases',
     'Integrations / Plugins' => 'Integrations / Plugins',
     'Documentation' => 'Documentation',
 
@@ -78,6 +84,7 @@
     // Admin
     'Content' => 'Content',
     'Add plugin' => 'Add plugin',
+    'Add release' => 'Add release',
     'Category' => 'Category',
     'Category placeholder' => 'Category (e.g., CRM, Printers)',
     'Short description' => 'Short description',
@@ -94,20 +101,40 @@
     'Changelog (Markdown)' => 'Changelog (Markdown)',
     'Last uploaded files' => 'Last uploaded files',
 
+    // Admin flash messages / errors
+    'News deleted' => 'News deleted',
+    'Release deleted' => 'Release deleted',
+    'Document deleted' => 'Document deleted',
+    'Plugin deleted' => 'Plugin deleted',
+    'Document added' => 'Document added',
+    'Plugin added' => 'Plugin added',
+    'Plugin version added' => 'Plugin version added',
+    'Release added' => 'Release added',
+    'Error' => 'Error',
+    'Failed to save file:' => 'Failed to save file:',
+    'Required fields are empty.' => 'Required fields are empty.',
+    '(no files)' => '(no files)',
+
     // Plugins list
     'Search plugins…' => 'Search plugins…',
     'Your Syrve version (e.g., 9.2)' => 'Your Syrve version (e.g., 9.2)',
-    'Tip Syrve' => 'Tip: enter your Syrve version and we will highlight the most compatible version.',
+    'Tip: enter your Syrve version and we’ll highlight the most compatible release.' => 'Tip: enter your Syrve version and we’ll highlight the most compatible release.',
+    'Supports filters:' => 'Supports filters:',
+    'category' => 'category',
     'Recommended version' => 'Recommended version',
     'min. Syrve' => 'min. Syrve',
+    'min' => 'min',
     'Downloads' => 'Downloads',
     'No versions' => 'No versions',
+    'No versions yet' => 'No versions yet',
     'No files' => 'No files',
+    'Changelog' => 'Changelog',
 
     // Plugin view
     'Plugin not found' => 'Plugin not found',
     'Site' => 'Site',
     'Repo' => 'Repo',
+    'More files' => 'More files',
 
     // Channels (badges)
     'stable' => 'stable',

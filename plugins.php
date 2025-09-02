@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 require_once __DIR__.'/helpers.php';
 
 $page_title = __('Plugins');
@@ -229,6 +230,17 @@ ksort($groups);
                                                         </a>
                                                     <?php endforeach; ?>
                                                 </li>
+
+                                                <?php if (trim((string)$best['changelog_md']) !== ''): ?>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li class="px-3 py-2">
+                                                        <div class="vers-head"><?=__('Changelog')?></div>
+                                                        <div class="small overflow-auto" style="max-height:280px">
+                                                            <?= nl2br(e($best['changelog_md'])) ?>
+                                                        </div>
+                                                    </li>
+                                                <?php endif; ?>
+
                                                 <?php
                                                 if (count($vers)>1){
                                                     foreach ($vers as $v){
@@ -247,6 +259,12 @@ ksort($groups);
                                                             echo '<a class="dropdown-item" href="'.e($v['file_path']).'" download>'.__('Download').'</a>';
                                                         } else {
                                                             echo '<div class="vers-meta">'.__('No files').'</div>';
+                                                        }
+                                                        if (trim((string)$v['changelog_md']) !== '') {
+                                                            echo '<div class="small mt-2 border-top pt-2">';
+                                                            echo '<div class="vers-head">'.__('Changelog').'</div>';
+                                                            echo '<div class="small overflow-auto" style="max-height:240px">'.nl2br(e($v['changelog_md'])).'</div>';
+                                                            echo '</div>';
                                                         }
                                                         echo '</li>';
                                                     }

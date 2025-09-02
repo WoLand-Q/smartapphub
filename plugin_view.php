@@ -43,6 +43,7 @@ $versions = db_all("SELECT * FROM plugin_versions WHERE plugin_id=? ORDER BY dat
                 <th><?=__('Min. Syrve')?></th>
                 <th><?=__('Date')?></th>
                 <th><?=__('Files')?></th>
+                <th><?=__('Changelog')?></th>
                 <th class="text-end"><?=__('Downloads')?></th>
             </tr>
             </thead>
@@ -68,6 +69,16 @@ $versions = db_all("SELECT * FROM plugin_versions WHERE plugin_id=? ORDER BY dat
                         }
                         ?>
                     </td>
+                    <td>
+                        <?php if (trim((string)$v['changelog_md']) !== ''): ?>
+                            <button class="btn btn-sm btn-outline-secondary"
+                                    data-bs-toggle="modal" data-bs-target="#ch-<?=$v['id']?>">
+                                <?=__('View')?>
+                            </button>
+                        <?php else: ?>
+                            <span class="text-muted">—</span>
+                        <?php endif; ?>
+                    </td>
                     <td class="text-end">
                         <?php if($files){
                             echo '<div class="btn-group">';
@@ -88,10 +99,28 @@ $versions = db_all("SELECT * FROM plugin_versions WHERE plugin_id=? ORDER BY dat
                         } ?>
                     </td>
                 </tr>
-            <?php endforeach; if(empty($versions)) echo '<tr><td colspan="6" class="text-center text-muted">'.__('No versions yet').'</td></tr>'; ?>
+            <?php endforeach; if(empty($versions)) echo '<tr><td colspan="7" class="text-center text-muted">'.__('No versions yet').'</td></tr>'; ?>
             </tbody>
         </table>
     </div>
 </div>
+
+<?php foreach($versions as $v): if (trim((string)$v['changelog_md'])==='') continue; ?>
+    <div class="modal fade" id="ch-<?=$v['id']?>" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><?=e($pl['name'])?> — v<?=e($v['version'])?> · <?=__('Changelog')?></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<?=__('Close')?>"></button>
+                </div>
+                <div class="modal-body">
+                    <article class="prose small">
+                        <?= nl2br(e($v['changelog_md'])) ?>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endforeach; ?>
 
 <?php include __DIR__.'/partials_footer.php'; ?>

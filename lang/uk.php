@@ -1,8 +1,10 @@
-<?php return [
+<?php
+return [
     // Global / navbar / footer
     'Overview' => 'Огляд',
     'News' => 'Новини',
     'Releases' => 'Релізи',
+    'Syrve releases' => 'Релізи Syrve',
     'Plugins' => 'Інтеграції',
     'Docs' => 'Документація',
     'Admin' => 'Адмін',
@@ -11,6 +13,7 @@
     'Logout' => 'Вихід',
     'Search across hub' => 'Пошук по всьому хабу',
     'Search' => 'Пошук',
+    'Toggle navigation' => 'Перемкнути навігацію',
     'Theme' => 'Тема',
     'Light' => 'Світла',
     'Dark' => 'Темна',
@@ -42,10 +45,13 @@
     'See all' => 'До всіх',
     'All integrations' => 'Всі інтеграції',
     'Go to' => 'Перейти',
+    'Other' => 'Інше',
+    'Close' => 'Закрити',
+    'View' => 'Переглянути',
+    'file' => 'файл',
 
     // Index (overview)
     'Latest news' => 'Новини',
-    'Syrve releases' => 'Релізи Syrve',
     'Integrations / Plugins' => 'Інтеграції / Плагіни',
     'Documentation' => 'Документація',
 
@@ -78,6 +84,7 @@
     // Admin
     'Content' => 'Контент',
     'Add plugin' => 'Додати плагін',
+    'Add release' => 'Додати реліз',
     'Category' => 'Категорія',
     'Category placeholder' => 'Категорія (напр. CRM, Принтери)',
     'Short description' => 'Короткий опис',
@@ -94,20 +101,40 @@
     'Changelog (Markdown)' => 'Changelog (Markdown)',
     'Last uploaded files' => 'Останні завантажені файли',
 
+    // Admin flash messages / errors
+    'News deleted' => 'Новину видалено',
+    'Release deleted' => 'Реліз видалено',
+    'Document deleted' => 'Документ видалено',
+    'Plugin deleted' => 'Плагін видалено',
+    'Document added' => 'Документ додано',
+    'Plugin added' => 'Плагін додано',
+    'Plugin version added' => 'Версію плагіна додано',
+    'Release added' => 'Реліз додано',
+    'Error' => 'Помилка',
+    'Failed to save file:' => 'Не вдалося зберегти файл:',
+    'Required fields are empty.' => 'Обовʼязкові поля порожні.',
+    '(no files)' => '(немає файлів)',
+
     // Plugins list
     'Search plugins…' => 'Пошук плагінів…',
     'Your Syrve version (e.g., 9.2)' => 'Ваша версія Syrve (напр. 9.2)',
-    'Tip Syrve' => 'Порада: введіть свою версію Syrve, і ми підсвітимо найбільш сумісну версію.',
+    'Tip: enter your Syrve version and we’ll highlight the most compatible release.' => 'Порада: введіть свою версію Syrve, і ми підсвітимо найбільш сумісний реліз.',
+    'Supports filters:' => 'Підтримуються фільтри:',
+    'category' => 'категорія',
     'Recommended version' => 'Рек. версія',
     'min. Syrve' => 'мін. Syrve',
+    'min' => 'мін',
     'Downloads' => 'Завантаження',
     'No versions' => 'Версій немає',
+    'No versions yet' => 'Версій поки немає',
     'No files' => 'Файлів немає',
+    'Changelog' => 'Список змін',
 
     // Plugin view
     'Plugin not found' => 'Плагін не знайдено',
     'Site' => 'Сайт',
     'Repo' => 'Repo',
+    'More files' => 'Ще файли',
 
     // Channels
     'stable' => 'stable',

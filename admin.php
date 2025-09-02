@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
+
 require_once __DIR__.'/helpers.php';
-include __DIR__.'/partials_header.php';
 require_admin();
 
 /* ---------- mini flash ---------- */
 if (!isset($_SESSION['flash'])) $_SESSION['flash'] = [];
-function flash_add($type,$msg){ $_SESSION['flash'][]=['t'=>$type,'m'=>$msg]; }
-function flash_show(){
+function flash_add(string $type, string $msg): void { $_SESSION['flash'][]=['t'=>$type,'m'=>$msg]; }
+function flash_show(): void {
     if (empty($_SESSION['flash'])) return;
     echo '<div class="container"><div class="position-fixed top-0 end-0 p-3" style="z-index:2000">';
     foreach($_SESSION['flash'] as $f){
@@ -19,7 +19,7 @@ function flash_show(){
 }
 
 /* small helper */
-function ensure_dir($path){
+function ensure_dir(string $path): void {
     if (!is_dir($path)) {
         if (!@mkdir($path, 0777, true) && !is_dir($path)) {
             throw new RuntimeException("Не вдалося створити папку: $path");
@@ -27,11 +27,27 @@ function ensure_dir($path){
     }
 }
 
-/* ---------- deletes ---------- */
-if (isset($_GET['del_news']))    { db()->prepare('DELETE FROM news WHERE id=?')->execute([(int)$_GET['del_news']]);    flash_add('ok', __('News deleted'));    header('Location: admin.php'); exit; }
-if (isset($_GET['del_release'])) { db()->prepare('DELETE FROM syrve_releases WHERE id=?')->execute([(int)$_GET['del_release']]); flash_add('ok', __('Release deleted')); header('Location: admin.php'); exit; }
-if (isset($_GET['del_doc']))     { db()->prepare('DELETE FROM docs WHERE id=?')->execute([(int)$_GET['del_doc']]);     flash_add('ok', __('Document deleted'));  header('Location: admin.php'); exit; }
-if (isset($_GET['del_plugin']))  { db()->prepare('DELETE FROM plugins WHERE id=?')->execute([(int)$_GET['del_plugin']]); flash_add('ok', __('Plugin deleted'));  header('Location: admin.php'); exit; }
+/* ---------- deletes (no output before headers!) ---------- */
+if (isset($_GET['del_news'])) {
+    db()->prepare('DELETE FROM news WHERE id=?')->execute([(int)$_GET['del_news']]);
+    flash_add('ok', __('News deleted'));
+    header('Location: admin.php', true, 303); exit;
+}
+if (isset($_GET['del_release'])) {
+    db()->prepare('DELETE FROM syrve_releases WHERE id=?')->execute([(int)$_GET['del_release']]);
+    flash_add('ok', __('Release deleted'));
+    header('Location: admin.php', true, 303); exit;
+}
+if (isset($_GET['del_doc'])) {
+    db()->prepare('DELETE FROM docs WHERE id=?')->execute([(int)$_GET['del_doc']]);
+    flash_add('ok', __('Document deleted'));
+    header('Location: admin.php', true, 303); exit;
+}
+if (isset($_GET['del_plugin'])) {
+    db()->prepare('DELETE FROM plugins WHERE id=?')->execute([(int)$_GET['del_plugin']]);
+    flash_add('ok', __('Plugin deleted'));
+    header('Location: admin.php', true, 303); exit;
+}
 
 /* ---------- creates ---------- */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -50,11 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 $filePath = $fnameRel;
             }
-            db()->prepare("INSERT INTO docs(title, description_md, link, file_path, tags, updated_at) VALUES(?,?,?,?,?,?)")
+            db()->prepare("INSERT INTO docs(title, description_md, link, file_path, tags, updated_at)
+                           VALUES(?,?,?,?,?,?)")
                 ->execute([$_POST['title'], $_POST['description_md'], $_POST['link']??'', $filePath, $_POST['tags']??'', now()]);
             flash_add('ok', __('Document added'));
         }catch(Throwable $e){ flash_add('err', __('Error').': '.$e->getMessage()); }
-        header('Location: admin.php'); exit;
+        header('Location: admin.php', true, 303); exit;
     }
 
     // plugin (catalog)
@@ -66,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ->execute([$slug,$_POST['name'],$_POST['description'],$_POST['repo_url']??'',$_POST['homepage']??'', $_POST['category']??'']);
             flash_add('ok', __('Plugin added'));
         }catch(Throwable $e){ flash_add('err', __('Error').': '.$e->getMessage()); }
-        header('Location: admin.php'); exit;
+        header('Location: admin.php', true, 303); exit;
     }
 
     // plugin version
@@ -122,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             flash_add('ok', __('Plugin version added').($firstPath?' · '.__('Files'):' · '.__('(no files)')));
         }catch(Throwable $e){ flash_add('err', __('Error').': '.$e->getMessage()); }
-        header('Location: admin.php'); exit;
+        header('Location: admin.php', true, 303); exit;
     }
 
     // Syrve release
@@ -137,11 +154,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
             flash_add('ok', __('Release added'));
         }catch(Throwable $e){ flash_add('err', __('Error').': '.$e->getMessage()); }
-        header('Location: admin.php'); exit;
+        header('Location: admin.php#pane-releases', true, 303); exit;
     }
 }
 
-/* ---------- data ---------- */
+/* ---------- data for view ---------- */
 $plugins = db_all("SELECT * FROM plugins ORDER BY name");
 $news    = db_all("SELECT * FROM news ORDER BY datetime(created_at) DESC");
 $docs    = db_all("SELECT * FROM docs ORDER BY datetime(updated_at) DESC");
@@ -160,6 +177,8 @@ $lastFiles = db_all("
     ORDER BY pf.id DESC
     LIMIT $fper OFFSET $foff
 ");
+
+include __DIR__.'/partials_header.php';
 ?>
     <style>
         #adminTabs .nav-link{border-radius:999px;}
@@ -179,8 +198,7 @@ $lastFiles = db_all("
         .files-panel .btn-sm{ white-space:nowrap; }
         .tab-content .table-responsive{overflow-x:auto; overflow-y:visible;}
         #pane-plugins .table{table-layout:fixed;}
-        #pane-plugins .table td,
-        #pane-plugins .table th{word-break:break-word;}
+        #pane-plugins .table td, #pane-plugins .table th{word-break:break-word;}
         .dropdown-menu{z-index:1900;}
     </style>
 
@@ -302,7 +320,7 @@ $lastFiles = db_all("
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </div> <!-- tab-content -->
                 </div>
             </div>
         </div>
@@ -400,8 +418,50 @@ $lastFiles = db_all("
                             <button class="btn btn-primary w-100"><?=__('Save')?></button>
                         </form>
                     </div></div>
+
+                <!-- Add release -->
+                <div class="card card-hover"><div class="card-body">
+                        <h6 class="card-title mb-2"><?=__('Add release')?></h6>
+                        <form method="post">
+                            <input type="hidden" name="action" value="add_release">
+                            <div class="mb-2">
+                                <input class="form-control" name="name" placeholder="<?=__('Title')?>" required>
+                            </div>
+                            <div class="mb-2">
+                                <select class="form-select" name="channel" aria-label="<?=__('Channel')?>">
+                                    <option value="stable">stable</option>
+                                    <option value="beta">beta</option>
+                                    <option value="preview">preview</option>
+                                </select>
+                            </div>
+                            <div class="mb-2">
+                                <input class="form-control" type="date" name="released_at" required placeholder="<?=__('Release date')?>">
+                            </div>
+                            <div class="d-flex gap-3 mb-2">
+                                <label class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="is_recommended">
+                                    <?=__('Recommended')?>
+                                </label>
+                                <label class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="is_lt">
+                                    <?=__('LT')?>
+                                </label>
+                            </div>
+                            <button class="btn btn-outline-primary w-100"><?=__('Save')?></button>
+                        </form>
+                    </div></div>
             </div>
         </div>
     </div>
+
+    <script>
+        /* открыть вкладку по якорю (#pane-releases и т.п.) */
+        document.addEventListener('DOMContentLoaded', () => {
+            const hash = location.hash;
+            if (!hash) return;
+            const trigger = document.querySelector(`[data-bs-target="${hash}"]`);
+            if (trigger && window.bootstrap?.Tab) new bootstrap.Tab(trigger).show();
+        });
+    </script>
 
 <?php include __DIR__.'/partials_footer.php';
