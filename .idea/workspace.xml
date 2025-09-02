@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fce0f15f-ec5c-4820-b542-3867dc9d2ffb" name="Changes" comment="Обновил языковый перевод, добавил просмотр ченджлога &#10;Добавил возможность добавлять релизы">
+    <list default="true" id="fce0f15f-ec5c-4820-b542-3867dc9d2ffb" name="Changes" comment="Добавил возможность постить новости">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/partials_header.php" beforeDir="false" afterPath="$PROJECT_DIR$/partials_header.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +71,7 @@
       <workItem from="1756365841157" duration="8065000" />
       <workItem from="1756455875456" duration="1366000" />
       <workItem from="1756708347040" duration="10764000" />
-      <workItem from="1756796759684" duration="4765000" />
+      <workItem from="1756796759684" duration="5250000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
@@ -265,7 +265,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756824690588</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Добавил возможность постить новости">
+      <option name="closed" value="true" />
+      <created>1756827385313</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1756827385313</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -302,6 +310,7 @@
     <MESSAGE value="удалил" />
     <MESSAGE value="Подчистил" />
     <MESSAGE value="Обновил языковый перевод, добавил просмотр ченджлога &#10;Добавил возможность добавлять релизы" />
-    <option name="LAST_COMMIT_MESSAGE" value="Обновил языковый перевод, добавил просмотр ченджлога &#10;Добавил возможность добавлять релизы" />
+    <MESSAGE value="Добавил возможность постить новости" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавил возможность постить новости" />
   </component>
 </project>
