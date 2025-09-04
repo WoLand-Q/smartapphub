@@ -9,12 +9,14 @@ require_once __DIR__.'/helpers.php';
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Smart Apps · Hub</title>
 
-    <!-- Early boot: theme (no FOUC) + accent -->
+    <!-- Early boot: theme (no FOUC) + accent + fx -->
     <script>
         (function () {
             const THEME_KEY  = 'sa-theme';   // 'light' | 'dark' | 'system'
-            const ACCENT_KEY = 'sa-accent';  // 'ember' | 'cyan' | 'grape' | 'mint' | 'gold'
+            const ACCENT_KEY = 'sa-accent';  // 'ember' | 'cyan' | 'grape' | 'mint' | 'gold' | (unset => default brand)
+            const FX_KEY     = 'sa-fx';      // 'on' | 'off'  (electric border layers)
 
+            // theme
             let theme = localStorage.getItem(THEME_KEY) || 'system';
             if (theme === 'system') {
                 theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -22,8 +24,13 @@ require_once __DIR__.'/helpers.php';
             document.documentElement.setAttribute('data-theme', theme);
             document.documentElement.dataset.bsTheme = theme; // Bootstrap 5.3
 
-            let accent = localStorage.getItem(ACCENT_KEY) || 'ember';
-            document.documentElement.setAttribute('data-accent', accent);
+            // accent (если не задан — используем дефолтную бренд-схему, без атрибута)
+            const accent = localStorage.getItem(ACCENT_KEY);
+            if (accent) document.documentElement.setAttribute('data-accent', accent);
+
+            // fx (electric on/off)
+            const fx = localStorage.getItem(FX_KEY) || 'on';
+            document.documentElement.setAttribute('data-fx', fx);
         })();
     </script>
 
@@ -36,19 +43,29 @@ require_once __DIR__.'/helpers.php';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/style.css">
 
-    <!-- Local tweaks for Electric cards (keeps Bootstrap border from fighting the glow) -->
+    <!-- Local tweaks for Electric cards + fx off fallback -->
     <style>
         .card.electric{ border-color:transparent; position:relative; overflow:clip; border-radius:var(--sa-radius); isolation:isolate; }
         .electric--hover .ebx__layer{ opacity:0; transition:opacity var(--sa-time-2) var(--sa-ease); }
         .electric--hover:hover .ebx__layer{ opacity:1; }
         .electric--on .ebx__layer{ opacity:1; }
-        /* маленькие цветные точки для меню Accent */
+
+        /* Accent menu dots */
         .accent-dot{ display:inline-block; width:.675rem; height:.675rem; border-radius:999px; margin-right:.5rem; vertical-align:-1px; }
         .accent-ember{ background:#dd8448; }
         .accent-cyan{  background:#22d3ee; }
         .accent-grape{ background:#8b5cf6; }
         .accent-mint{  background:#10b981; }
         .accent-gold{  background:#f59e0b; }
+
+        /* FX OFF: полностью скрываем декоративные слои и возвращаем обычный бордер */
+        html[data-fx="off"] .card.electric{
+            border-color: var(--sa-border);
+            overflow: initial;
+            isolation: auto;
+        }
+        html[data-fx="off"] .card.electric .ebx__layer{ display:none !important; }
+        html[data-fx="off"] .card.electric .ebx__content{ position:static; z-index:auto; }
     </style>
 </head>
 <body>
@@ -108,7 +125,7 @@ require_once __DIR__.'/helpers.php';
                 <?php endif; ?>
             </ul>
 
-            <!-- right: search + language + theme + accent + profile -->
+            <!-- right: search + language + theme + accent + FX + profile -->
             <form class="d-flex me-2" method="get" action="search.php" role="search" id="sa-search-form" autocomplete="off">
                 <div class="position-relative" style="min-width:260px">
                     <input
@@ -159,11 +176,24 @@ require_once __DIR__.'/helpers.php';
                     <?=__('Accent')?>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accentToggle" id="sa-accent-menu">
+                    <li><button class="dropdown-item" data-accent="__default"><span class="accent-dot" style="background:currentColor"></span>Default (Brand)</button></li>
+                    <li><hr class="dropdown-divider"></li>
                     <li><button class="dropdown-item" data-accent="ember"><span class="accent-dot accent-ember"></span>Ember</button></li>
                     <li><button class="dropdown-item" data-accent="cyan"><span class="accent-dot accent-cyan"></span>Cyan</button></li>
                     <li><button class="dropdown-item" data-accent="grape"><span class="accent-dot accent-grape"></span>Grape</button></li>
                     <li><button class="dropdown-item" data-accent="mint"><span class="accent-dot accent-mint"></span>Mint</button></li>
                     <li><button class="dropdown-item" data-accent="gold"><span class="accent-dot accent-gold"></span>Gold</button></li>
+                </ul>
+            </div>
+
+            <!-- FX (Electric on/off) -->
+            <div class="dropdown me-2">
+                <button class="btn btn-outline-secondary btn-sm dropdown-toggle" id="fxToggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    FX
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="fxToggle" id="sa-fx-menu">
+                    <li><button class="dropdown-item" data-fx="on"><?=__('Electric FX: On')?></button></li>
+                    <li><button class="dropdown-item" data-fx="off"><?=__('Electric FX: Off')?></button></li>
                 </ul>
             </div>
 
@@ -287,8 +317,11 @@ require_once __DIR__.'/helpers.php';
     })();
 
     /* ---------- Electric Border injector (EBX) ----------
-       Строит внутри .electric декоративные слои. */
+       Строит внутри .electric декоративные слои.
+       Если FX выключен (html[data-fx="off"]), инжектор не запускается. */
     (function(){
+        if (document.documentElement.getAttribute('data-fx') === 'off') return;
+
         function mount(el){
             if (el.dataset.ebxReady === '1') return;
             el.dataset.ebxReady = '1';
@@ -356,10 +389,11 @@ require_once __DIR__.'/helpers.php';
         mo.observe(document.documentElement, {subtree:true, childList:true});
     })();
 
-    /* ---------- Theme/Accent controls ---------- */
+    /* ---------- Theme/Accent/FX controls ---------- */
     (function(){
         const THEME_KEY  = 'sa-theme';
         const ACCENT_KEY = 'sa-accent';
+        const FX_KEY     = 'sa-fx';
 
         function setTheme(t){
             localStorage.setItem(THEME_KEY, t);
@@ -368,30 +402,39 @@ require_once __DIR__.'/helpers.php';
             }
             document.documentElement.setAttribute('data-theme', t);
             document.documentElement.dataset.bsTheme = t;
-            // лёгкий reload убирает редкие артефакты Bootstrap
-            location.reload();
+            location.reload(); // убрать артефакты
         }
         function setAccent(a){
-            localStorage.setItem(ACCENT_KEY, a);
-            document.documentElement.setAttribute('data-accent', a);
+            if (a === '__default'){
+                localStorage.removeItem(ACCENT_KEY);
+                document.documentElement.removeAttribute('data-accent'); // вернули дефолтные цвета
+            } else {
+                localStorage.setItem(ACCENT_KEY, a);
+                document.documentElement.setAttribute('data-accent', a);
+            }
+        }
+        function setFx(v){
+            localStorage.setItem(FX_KEY, v);               // 'on' | 'off'
+            document.documentElement.setAttribute('data-fx', v);
+            // Без перезагрузки: просто скрываем/показываем слои через CSS.
+            // Если FX выключен до инжектора — он и не запустится.
         }
 
-        // expose (если понадобится программно)
         window.__saSetTheme  = setTheme;
         window.__saSetAccent = setAccent;
+        window.__saSetFx     = setFx;
 
-        // wire menus
         document.getElementById('sa-theme-menu')?.addEventListener('click', (e)=>{
-            const btn = e.target.closest('[data-theme]');
-            if (!btn) return;
-            e.preventDefault();
-            setTheme(btn.getAttribute('data-theme'));
+            const btn = e.target.closest('[data-theme]'); if (!btn) return;
+            e.preventDefault(); setTheme(btn.getAttribute('data-theme'));
         });
         document.getElementById('sa-accent-menu')?.addEventListener('click', (e)=>{
-            const btn = e.target.closest('[data-accent]');
-            if (!btn) return;
-            e.preventDefault();
-            setAccent(btn.getAttribute('data-accent'));
+            const btn = e.target.closest('[data-accent]'); if (!btn) return;
+            e.preventDefault(); setAccent(btn.getAttribute('data-accent'));
+        });
+        document.getElementById('sa-fx-menu')?.addEventListener('click', (e)=>{
+            const btn = e.target.closest('[data-fx]'); if (!btn) return;
+            e.preventDefault(); setFx(btn.getAttribute('data-fx'));
         });
     })();
 </script>
