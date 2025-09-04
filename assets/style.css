@@ -1,4 +1,3 @@
-
 :root{
     /* semantic surfaces */
     --sa-bg:        #f7f8fb;
@@ -15,7 +14,10 @@
     --sa-brand-400: #818cf8;
     --sa-brand-500: #6366f1;
     --sa-brand-600: #5458d9;
-    --sa-accent:    #22c55e;
+
+    /* accent (будет переопределяться через html[data-accent]) */
+    --sa-accent:    #dd8448;         /* по умолчанию ember */
+    --sa-electric:  var(--sa-accent);/* цвет электрической рамки */
 
     /* state colors */
     --sa-info:   #3b82f6;
@@ -35,6 +37,13 @@
 
     color-scheme: light dark;
 }
+
+/* ===== Палитры акцентов ===== */
+html[data-accent="ember"] { --sa-accent:#dd8448; --sa-electric:#dd8448; }
+html[data-accent="cyan"]  { --sa-accent:#22d3ee; --sa-electric:#22d3ee; }
+html[data-accent="grape"] { --sa-accent:#8b5cf6; --sa-electric:#8b5cf6; }
+html[data-accent="mint"]  { --sa-accent:#10b981; --sa-electric:#10b981; }
+html[data-accent="gold"]  { --sa-accent:#f59e0b; --sa-electric:#f59e0b; }
 
 html[data-theme="dark"]{
     --sa-bg:#0a0f15;
@@ -71,22 +80,141 @@ body{ background:var(--sa-bg); color:var(--sa-ink); }
 .card-hover:hover{
     transform:translateY(-2px);
     box-shadow:var(--sa-shadow);
-    border-color:color-mix(in srgb, var(--sa-brand-500) 24%, var(--sa-border));
+    border-color:color-mix(in oklab, var(--sa-accent) 24%, var(--sa-border));
 }
 
+/* ===================== Electric Border · EBX ===================== */
+/* Навесь на .card класс .electric и один из режимов:
+      .electric--frame   — «единый» аккуратный (свет только по кромке)
+      .electric--dramatic— как в референсе (мощный glow)
+   Контент не дублируется: слои создаёт инжектор в header. */
+
+.card.electric{
+    position:relative;
+    border-radius:var(--sa-radius);
+    isolation:isolate;
+    overflow:clip;                /* аккуратно подрезаем glow */
+    border-color:transparent;     /* не спорим со светящейся рамкой */
+    --ebx-color: var(--sa-electric);
+    --ebx-visible:1;
+}
+
+/* режимы видимости (по умолчанию — видно всегда, если не указан --hover) */
+.electric--on    { --ebx-visible:1; }
+.electric--hover { --ebx-visible:0; }
+.electric--hover:hover { --ebx-visible:1; }
+
+/* Frame — единый аккуратный стиль */
+.electric--frame{
+    --ebx-alpha:.5;
+    --ebx-edge-w:2px;
+    --ebx-pad:8px;       /* ширина «кольца» */
+    --ebx-glow1:1px;
+    --ebx-glow2:3px;
+    --ebx-scale:1.02;
+    --ebx-show-fill:0;   /* без внутреннего «фонаря» */
+}
+
+/* Dramatic — «как в демо» */
+.electric--dramatic{
+    --ebx-alpha:.72;
+    --ebx-edge-w:2px;
+    --ebx-pad:10px;
+    --ebx-glow1:1px;
+    --ebx-glow2:4px;
+    --ebx-scale:1.08;
+    --ebx-show-fill:1;
+}
+
+/* корневой контейнер эффекта (создаётся скриптом) */
+.ebx{ position:relative; border-radius:inherit; min-height:1px; }
+
+/* общий слой */
+.ebx__layer{
+    position:absolute; inset:0;
+    border-radius:inherit;
+    pointer-events:none;
+    opacity:var(--ebx-visible,1);
+    transition:opacity var(--sa-time-2) var(--sa-ease);
+}
+
+/* тонкий внешний контур */
+.ebx__border-outer{
+    border:2px solid color-mix(in oklab, var(--ebx-color) 60%, white);
+    opacity:.35;
+}
+
+/* «живая» кромка с турбулентностью */
+.ebx__main{
+    border:var(--ebx-edge-w) solid var(--ebx-color);
+    filter:url(#turbulent-displace); /* defs подключаются в header */
+}
+
+/* Ограничиваем мягкий glow и накладки только «кольцом» по краю */
+.ebx__glow1, .ebx__glow2, .ebx__overlay1, .ebx__overlay2, .ebx__background{
+    padding: var(--ebx-pad);
+    box-sizing: border-box;
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude; /* центр чистый */
+}
+
+/* мягкие свечения */
+.ebx__glow1{ border:2px solid color-mix(in oklab, var(--ebx-color) 95%, white); filter:blur(var(--ebx-glow1)); opacity:.6; }
+.ebx__glow2{ border:2px solid color-mix(in oklab, var(--ebx-color) 85%, white); filter:blur(var(--ebx-glow2)); opacity:.45; }
+
+/* стеклянные накладки */
+.ebx__overlay1, .ebx__overlay2{
+    mix-blend-mode:overlay;
+    transform:scale(var(--ebx-scale));
+    filter:blur(16px);
+    border-radius:inherit;
+    background:linear-gradient(-30deg,#fff,transparent 30%,transparent 70%,#fff);
+    opacity:calc(var(--ebx-show-fill,0) * .7);
+}
+.ebx__overlay2{ opacity:calc(var(--ebx-show-fill,0) * .35); }
+
+/* фоновый «фонарь» */
+.ebx__background{
+    z-index:-1;
+    transform:scale(var(--ebx-scale));
+    filter:blur(32px);
+    opacity:calc(var(--ebx-show-fill,0) * .30);
+    background:linear-gradient(
+            -30deg,
+            oklch(from var(--ebx-color) l c h),
+            transparent,
+            var(--ebx-color)
+    );
+}
+
+/* место для реального контента карточки */
+.ebx__content{ position:relative; border-radius:inherit; z-index:5; }
+
+/* чуть слабее в светлой теме */
+html[data-theme="light"] .card.electric{ --ebx-alpha:.56; }
+
+@media (prefers-reduced-motion: reduce){
+    .ebx__main{ filter:none; }
+}
+/* ============================================================================ */
+
+/* Кнопки/ссылки на акценте */
 .btn-primary{
-    --bs-btn-bg: var(--sa-brand-500);
-    --bs-btn-border-color: var(--sa-brand-500);
-    --bs-btn-hover-bg: var(--sa-brand-600);
-    --bs-btn-hover-border-color: var(--sa-brand-600);
-    --bs-btn-active-bg: var(--sa-brand-600);
+    --bs-btn-bg: var(--sa-accent);
+    --bs-btn-border-color: var(--sa-accent);
+    --bs-btn-hover-bg: color-mix(in oklab, var(--sa-accent) 86%, black);
+    --bs-btn-hover-border-color: color-mix(in oklab, var(--sa-accent) 86%, black);
+    --bs-btn-active-bg: color-mix(in oklab, var(--sa-accent) 86%, black);
 }
 .btn-outline-primary{
-    --bs-btn-color: var(--sa-brand-500);
-    --bs-btn-border-color: color-mix(in srgb, var(--sa-brand-500) 55%, var(--sa-border));
-    --bs-btn-hover-bg: color-mix(in srgb, var(--sa-brand-500) 10%, transparent);
-    --bs-btn-hover-border-color: var(--sa-brand-500);
+    --bs-btn-color: var(--sa-accent);
+    --bs-btn-border-color: color-mix(in oklab, var(--sa-accent) 55%, transparent);
+    --bs-btn-hover-bg: color-mix(in oklab, var(--sa-accent) 12%, transparent);
+    --bs-btn-hover-border-color: var(--sa-accent);
 }
+a{ color: color-mix(in oklab, var(--sa-accent) 78%, white); }
+a:hover{ color: var(--sa-accent); }
 
 /* аккуратные чипы и бейджи */
 .chip{
@@ -94,9 +222,9 @@ body{ background:var(--sa-bg); color:var(--sa-ink); }
     border:1px solid var(--sa-border);
 }
 .badge-soft{
-    background:color-mix(in srgb, var(--sa-brand-500) 18%, transparent);
-    color:var(--sa-brand-600);
-    border:1px solid color-mix(in srgb, var(--sa-brand-500) 36%, transparent);
+    background:color-mix(in srgb, var(--sa-accent) 18%, transparent);
+    color:color-mix(in oklab, var(--sa-accent) 80%, white);
+    border:1px solid color-mix(in srgb, var(--sa-accent) 36%, transparent);
 }
 .badge-muted{
     background:color-mix(in srgb, var(--sa-muted) 14%, transparent);
@@ -104,13 +232,12 @@ body{ background:var(--sa-bg); color:var(--sa-ink); }
     border:1px solid color-mix(in srgb, var(--sa-muted) 28%, transparent);
 }
 
-/* «живая» брендовая подпись в navbar при ховере */
+/* «живая» подпись в navbar */
 .navbar-brand{
-    background: linear-gradient(90deg, var(--sa-brand-500), var(--sa-brand-600));
+    background: linear-gradient(90deg, var(--sa-accent), color-mix(in oklab, var(--sa-accent) 70%, white));
     -webkit-background-clip:text; background-clip:text; color:transparent;
 }
-.navbar-brand:hover{ filter:saturate(1.2) brightness(1.02); }
-
+.navbar-brand:hover{ filter:saturate(1.12) brightness(1.02); }
 
 @keyframes sa-fade-up   { from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
 @keyframes sa-scale-in  { from{opacity:.8; transform:scale(.98)} to{opacity:1; transform:scale(1)} }
@@ -129,7 +256,7 @@ body{ background:var(--sa-bg); color:var(--sa-ink); }
             background-color var(--sa-time-2) var(--sa-ease);
 }
 .btn:active{ transform: translateY(1px) scale(.99); }
-.table tbody tr:hover{ background: color-mix(in srgb, var(--sa-brand-500) 6%, transparent); }
+.table tbody tr:hover{ background: color-mix(in oklab, var(--sa-accent) 6%, transparent); }
 
 /* липкая шапка, мягкое сжатие при скролле */
 .navbar.bg-body{
@@ -169,8 +296,8 @@ body{ background:var(--sa-bg); color:var(--sa-ink); }
 
 /* удобные фокусы */
 :where(a,button,.form-control,.form-select):focus{
-    box-shadow:0 0 0 .2rem color-mix(in srgb, var(--sa-brand-500) 28%, transparent) !important;
-    border-color: color-mix(in srgb, var(--sa-brand-500) 55%, var(--sa-border)) !important;
+    box-shadow:0 0 0 .2rem color-mix(in oklab, var(--sa-accent) 28%, transparent) !important;
+    border-color: color-mix(in oklab, var(--sa-accent) 55%, var(--sa-border)) !important;
 }
 
 /* скроллбары */
@@ -205,12 +332,12 @@ body{ background:var(--sa-bg); color:var(--sa-ink); }
 /* верхняя полоса прогресса */
 #sa-nprog{
     position:fixed; left:0; top:0; height:3px; width:0%;
-    background: linear-gradient(90deg, var(--sa-brand-500), var(--sa-brand-600));
-    box-shadow: 0 0 12px color-mix(in srgb, var(--sa-brand-500) 45%, transparent);
+    background: linear-gradient(90deg, var(--sa-accent), color-mix(in oklab, var(--sa-accent) 70%, white));
+    box-shadow: 0 0 12px color-mix(in oklab, var(--sa-accent) 45%, transparent);
     transition: width var(--sa-time-2) var(--sa-ease), opacity .3s;
     z-index: 3000; opacity:0;
-    pointer-events: none;   /* не мешает кликам */
-    will-change: width;     /* оптимизация анимации */
+    pointer-events: none;
+    will-change: width;
 }
 #sa-nprog.active{ opacity:1; }
 
@@ -233,7 +360,6 @@ html[data-theme="dark"] .prose{ color:var(--sa-ink); }
     border:0;
     margin:.6rem 0;
 }
-
 
 .prose table{ width:100%; border-collapse:collapse; }
 .prose pre{

@@ -128,3 +128,23 @@ function normalize_syrve_short(string $s): string {
     $parts = explode('.', $s);
     return count($parts) >= 2 ? ($parts[0].'.'.$parts[1]) : $s;
 }
+
+function sa_electric_border(): void
+{
+    echo <<<SVG
+<svg class="electric__fx" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+  <g filter="url(#eb-spark)">
+    <!-- мягкий glow под кромкой -->
+    <g filter="url(#eb-glow)">
+      <rect x="1.25" y="1.25" width="97.5" height="97.5" rx="12" ry="12"
+            fill="none"
+            style="stroke:var(--eb-color);stroke-opacity:var(--eb-alpha);stroke-width:var(--eb-glow-w)"/>
+    </g>
+    <!-- острая кромка -->
+    <rect x="1.25" y="1.25" width="97.5" height="97.5" rx="12" ry="12"
+          fill="none"
+          style="stroke:var(--eb-color);stroke-width:var(--eb-edge-w)"/>
+  </g>
+</svg>
+SVG;
+}

@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fce0f15f-ec5c-4820-b542-3867dc9d2ffb" name="Changes" comment="Добавил возможность постить новости">
+    <list default="true" id="fce0f15f-ec5c-4820-b542-3867dc9d2ffb" name="Changes" comment="Добавил лого - иконки">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/helpers.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/partials_header.php" beforeDir="false" afterPath="$PROJECT_DIR$/partials_header.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -35,7 +38,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/server/htdocs&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/server/htdocs/uploads/images&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -45,6 +48,9 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\server\htdocs\uploads\images" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\server\htdocs\data" />
     </key>
@@ -71,7 +77,9 @@
       <workItem from="1756365841157" duration="8065000" />
       <workItem from="1756455875456" duration="1366000" />
       <workItem from="1756708347040" duration="10764000" />
-      <workItem from="1756796759684" duration="5250000" />
+      <workItem from="1756796759684" duration="6007000" />
+      <workItem from="1756883460752" duration="2557000" />
+      <workItem from="1756964169775" duration="6320000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
@@ -273,7 +281,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756827385313</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Добавил лого - иконки">
+      <option name="closed" value="true" />
+      <created>1756827929794</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1756827929794</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -311,6 +327,7 @@
     <MESSAGE value="Подчистил" />
     <MESSAGE value="Обновил языковый перевод, добавил просмотр ченджлога &#10;Добавил возможность добавлять релизы" />
     <MESSAGE value="Добавил возможность постить новости" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавил возможность постить новости" />
+    <MESSAGE value="Добавил лого - иконки" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавил лого - иконки" />
   </component>
 </project>

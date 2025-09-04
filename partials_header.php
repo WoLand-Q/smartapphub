@@ -9,30 +9,84 @@ require_once __DIR__.'/helpers.php';
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Smart Apps · Hub</title>
 
-    <!-- Early theme boot (no FOUC) -->
+    <!-- Early boot: theme (no FOUC) + accent -->
     <script>
         (function () {
-            const KEY = 'sa-theme'; // 'light' | 'dark' | 'system'
-            let pref = localStorage.getItem(KEY) || 'system';
-            if (pref === 'system') {
-                pref = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const THEME_KEY  = 'sa-theme';   // 'light' | 'dark' | 'system'
+            const ACCENT_KEY = 'sa-accent';  // 'ember' | 'cyan' | 'grape' | 'mint' | 'gold'
+
+            let theme = localStorage.getItem(THEME_KEY) || 'system';
+            if (theme === 'system') {
+                theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
             }
-            document.documentElement.setAttribute('data-theme', pref);
-            document.documentElement.dataset.bsTheme = pref; // Bootstrap 5.3
+            document.documentElement.setAttribute('data-theme', theme);
+            document.documentElement.dataset.bsTheme = theme; // Bootstrap 5.3
+
+            let accent = localStorage.getItem(ACCENT_KEY) || 'ember';
+            document.documentElement.setAttribute('data-accent', accent);
         })();
     </script>
+
     <link rel="icon" href="/uploads/images/favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="/uploads/images/favicon-32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/uploads/images/favicon-16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/uploads/images/apple-touch-icon.png">
     <meta name="theme-color" content="#111827">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/style.css">
+
+    <!-- Local tweaks for Electric cards (keeps Bootstrap border from fighting the glow) -->
+    <style>
+        .card.electric{ border-color:transparent; position:relative; overflow:clip; border-radius:var(--sa-radius); isolation:isolate; }
+        .electric--hover .ebx__layer{ opacity:0; transition:opacity var(--sa-time-2) var(--sa-ease); }
+        .electric--hover:hover .ebx__layer{ opacity:1; }
+        .electric--on .ebx__layer{ opacity:1; }
+        /* маленькие цветные точки для меню Accent */
+        .accent-dot{ display:inline-block; width:.675rem; height:.675rem; border-radius:999px; margin-right:.5rem; vertical-align:-1px; }
+        .accent-ember{ background:#dd8448; }
+        .accent-cyan{  background:#22d3ee; }
+        .accent-grape{ background:#8b5cf6; }
+        .accent-mint{  background:#10b981; }
+        .accent-gold{  background:#f59e0b; }
+    </style>
 </head>
 <body>
 
 <!-- Top progress bar -->
 <div id="sa-nprog"></div>
+
+<!-- SVG defs: turbulent displacement (for the “alive” edge) -->
+<svg width="0" height="0" style="position:absolute">
+    <defs>
+        <filter id="turbulent-displace" color-interpolation-filters="sRGB" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise1" seed="1"/>
+            <feOffset in="noise1" dx="0" dy="0" result="offset1">
+                <animate attributeName="dy" values="700;0" dur="6s" repeatCount="indefinite" calcMode="linear"/>
+            </feOffset>
+
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise2" seed="1"/>
+            <feOffset in="noise2" dx="0" dy="0" result="offset2">
+                <animate attributeName="dy" values="0;-700" dur="6s" repeatCount="indefinite" calcMode="linear"/>
+            </feOffset>
+
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise3" seed="2"/>
+            <feOffset in="noise3" dx="0" dy="0" result="offset3">
+                <animate attributeName="dx" values="490;0" dur="6s" repeatCount="indefinite" calcMode="linear"/>
+            </feOffset>
+
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise4" seed="2"/>
+            <feOffset in="noise4" dx="0" dy="0" result="offset4">
+                <animate attributeName="dx" values="0;-490" dur="6s" repeatCount="indefinite" calcMode="linear"/>
+            </feOffset>
+
+            <feComposite in="offset1" in2="offset2" result="part12"/>
+            <feComposite in="offset3" in2="offset4" result="part34"/>
+            <feBlend in="part12" in2="part34" mode="color-dodge" result="combinedNoise"/>
+            <feDisplacementMap in="SourceGraphic" in2="combinedNoise" scale="30" xChannelSelector="R" yChannelSelector="B"/>
+        </filter>
+    </defs>
+</svg>
 
 <nav class="navbar navbar-expand-lg sticky-top border-bottom bg-body">
     <div class="container-fluid">
@@ -54,7 +108,7 @@ require_once __DIR__.'/helpers.php';
                 <?php endif; ?>
             </ul>
 
-            <!-- right: search + language + theme + profile -->
+            <!-- right: search + language + theme + accent + profile -->
             <form class="d-flex me-2" method="get" action="search.php" role="search" id="sa-search-form" autocomplete="off">
                 <div class="position-relative" style="min-width:260px">
                     <input
@@ -92,10 +146,24 @@ require_once __DIR__.'/helpers.php';
                 <button class="btn btn-outline-secondary btn-sm dropdown-toggle" id="themeToggle" data-bs-toggle="dropdown" aria-expanded="false">
                     <?=__('Theme')?>
                 </button>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeToggle">
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeToggle" id="sa-theme-menu">
                     <li><button class="dropdown-item" data-theme="light"><?=__('Light')?></button></li>
                     <li><button class="dropdown-item" data-theme="dark"><?=__('Dark')?></button></li>
                     <li><button class="dropdown-item" data-theme="system"><?=__('System')?></button></li>
+                </ul>
+            </div>
+
+            <!-- Accent -->
+            <div class="dropdown me-2">
+                <button class="btn btn-outline-secondary btn-sm dropdown-toggle" id="accentToggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <?=__('Accent')?>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accentToggle" id="sa-accent-menu">
+                    <li><button class="dropdown-item" data-accent="ember"><span class="accent-dot accent-ember"></span>Ember</button></li>
+                    <li><button class="dropdown-item" data-accent="cyan"><span class="accent-dot accent-cyan"></span>Cyan</button></li>
+                    <li><button class="dropdown-item" data-accent="grape"><span class="accent-dot accent-grape"></span>Grape</button></li>
+                    <li><button class="dropdown-item" data-accent="mint"><span class="accent-dot accent-mint"></span>Mint</button></li>
+                    <li><button class="dropdown-item" data-accent="gold"><span class="accent-dot accent-gold"></span>Gold</button></li>
                 </ul>
             </div>
 
@@ -170,7 +238,7 @@ require_once __DIR__.'/helpers.php';
             if (!q || q.trim().length < 2){ hide(); return; }
             fetch('search_suggest.php?q=' + encodeURIComponent(q.trim()))
                 .then(r=>r.ok ? r.json() : {items:[]})
-                .then(data => build(data.items || [], q))
+                .then(data => build((data&&data.items)||[], q))
                 .catch(()=> hide());
         }
         input.addEventListener('input', (e)=>{
@@ -216,6 +284,115 @@ require_once __DIR__.'/helpers.php';
         const show = el => el.classList.add('sa-entrance');
         const io = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ show(e.target); io.unobserve(e.target); } }), {threshold:.06});
         document.querySelectorAll('.card, .table tbody tr').forEach(el => io.observe(el));
+    })();
+
+    /* ---------- Electric Border injector (EBX) ----------
+       Строит внутри .electric декоративные слои. */
+    (function(){
+        function mount(el){
+            if (el.dataset.ebxReady === '1') return;
+            el.dataset.ebxReady = '1';
+
+            const wrap = document.createElement('div');
+            wrap.className = 'ebx';
+            wrap.style.position = 'relative';
+            wrap.style.borderRadius = 'inherit';
+
+            const mk = cls => {
+                const d = document.createElement('div');
+                d.className = 'ebx__layer ' + cls;
+                d.style.position = 'absolute';
+                d.style.inset = '0';
+                d.style.borderRadius = 'inherit';
+                d.style.pointerEvents = 'none';
+                return d;
+            };
+
+            const borderOuter = mk('ebx__border-outer');
+            const mainEdge    = mk('ebx__main');
+            mainEdge.style.border = '2px solid var(--ebx-color,var(--sa-electric,#dd8448))';
+            mainEdge.style.filter = 'url(#turbulent-displace)';
+
+            const glow1    = mk('ebx__glow1');
+            const glow2    = mk('ebx__glow2');
+            const overlay1 = mk('ebx__overlay1');
+            const overlay2 = mk('ebx__overlay2');
+            const backGlow = mk('ebx__background'); backGlow.style.zIndex = '-1';
+
+            const content = document.createElement('div');
+            content.className = 'ebx__content';
+            content.style.position = 'relative';
+            content.style.borderRadius = 'inherit';
+            content.style.zIndex = '5';
+
+            while (el.firstChild) content.appendChild(el.firstChild);
+
+            wrap.appendChild(borderOuter);
+            wrap.appendChild(mainEdge);
+            wrap.appendChild(glow1);
+            wrap.appendChild(glow2);
+            wrap.appendChild(overlay1);
+            wrap.appendChild(overlay2);
+            wrap.appendChild(backGlow);
+            wrap.appendChild(content);
+
+            el.appendChild(wrap);
+        }
+
+        function scan(root){
+            (root.querySelectorAll ? root : document).querySelectorAll('.electric').forEach(mount);
+        }
+
+        document.addEventListener('DOMContentLoaded', scan);
+        const mo = new MutationObserver(muts=>{
+            for (const m of muts){
+                for (const n of m.addedNodes){
+                    if (n.nodeType !== 1) continue;
+                    if (n.matches?.('.electric')) mount(n);
+                    scan(n);
+                }
+            }
+        });
+        mo.observe(document.documentElement, {subtree:true, childList:true});
+    })();
+
+    /* ---------- Theme/Accent controls ---------- */
+    (function(){
+        const THEME_KEY  = 'sa-theme';
+        const ACCENT_KEY = 'sa-accent';
+
+        function setTheme(t){
+            localStorage.setItem(THEME_KEY, t);
+            if (t === 'system'){
+                t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            document.documentElement.setAttribute('data-theme', t);
+            document.documentElement.dataset.bsTheme = t;
+            // лёгкий reload убирает редкие артефакты Bootstrap
+            location.reload();
+        }
+        function setAccent(a){
+            localStorage.setItem(ACCENT_KEY, a);
+            document.documentElement.setAttribute('data-accent', a);
+        }
+
+        // expose (если понадобится программно)
+        window.__saSetTheme  = setTheme;
+        window.__saSetAccent = setAccent;
+
+        // wire menus
+        document.getElementById('sa-theme-menu')?.addEventListener('click', (e)=>{
+            const btn = e.target.closest('[data-theme]');
+            if (!btn) return;
+            e.preventDefault();
+            setTheme(btn.getAttribute('data-theme'));
+        });
+        document.getElementById('sa-accent-menu')?.addEventListener('click', (e)=>{
+            const btn = e.target.closest('[data-accent]');
+            if (!btn) return;
+            e.preventDefault();
+            setAccent(btn.getAttribute('data-accent'));
+        });
     })();
 </script>
 
