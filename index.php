@@ -68,7 +68,7 @@ $docs  = db_all("SELECT id,title,tags,updated_at FROM docs ORDER BY datetime(upd
         </div>
     </div>
 
-    <!-- PLUGINS (grid) -->
+    <!-- PLUGINS (grid) test deploy -->
     <div class="col-12">
         <div class="card card-hover electric electric--on electric--dramatic">
             <div class="card-body">
